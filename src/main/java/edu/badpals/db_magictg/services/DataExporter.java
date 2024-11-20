@@ -3,14 +3,8 @@ package edu.badpals.db_magictg.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataExporter {
     public static void exportData(String fileName, String data) {
@@ -35,16 +29,21 @@ public class DataExporter {
 
             // recorrer las filas y columnas de para crear un mapa de cada carta
             for (String row : rows) {
-                String[] columns = row.split(", ");
-                Map<String, String> card = new HashMap<>();
+                // Crear un mapa para una sola carta
+                Map<String, String> card = new LinkedHashMap<>();
+
+                // Dividir columnas correctamente por ", " sin perder datos
+                String[] columns = row.split(", (?=\\w+:)");
                 for (String column : columns) {
-                    String[] keyValue = column.split(":");
-                    card.put(keyValue[0].trim(), keyValue[1].trim());
+                    String[] keyValue = column.split(":", 2); // Dividir clave y valor con ":" como separador
+                    card.put(keyValue[0].trim(), keyValue[1].trim()); // El trim() limpia espacios y devuelve el valor
                 }
-                cardList.add(card);
+                if (!card.isEmpty()) {
+                    cardList.add(card);
+                }
             }
 
-            // crear la clave "cards" que tendrá dentro una lista de cartas
+            // Crear el objeto padre "cards"
             Map<String, Object> resultJson = new HashMap<>();
             resultJson.put("cards", cardList);
 
@@ -56,6 +55,8 @@ public class DataExporter {
             e.printStackTrace();
         }
     }
+
+
 }
 
 
