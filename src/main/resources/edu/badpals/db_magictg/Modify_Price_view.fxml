@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="278.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane prefHeight="356.0" prefWidth="403.0">
+            <children>
+                <Label layoutX="26.0" layoutY="20.0" text="Modificar Precio">
+                    <font>
+                        <Font size="49.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="Txt_NombreCarta" layoutX="125.0" layoutY="117.0" promptText="Nombre de la Carta" />
+                <TextField fx:id="Txt_NuevoPrecio" layoutX="125.0" layoutY="164.0" promptText="Nuevo Precio" />
+                <Button fx:id="Btn_ModificarPrecio" layoutX="168.0" layoutY="216.0" mnemonicParsing="false" text="Modificar" />
+                <Button fx:id="Btn_VolverInicio" layoutX="325.0" layoutY="241.0" mnemonicParsing="false" text="Volver" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
