@@ -115,35 +115,20 @@ public class Connect {
 
     public static List<Card> searchCardByName(String cardName){
         List<Card> selectedCard = new ArrayList<>();
-        String query = "SELECT \n" +
-                "\tc.ID_CARD,\n" +
-                "\tc.NOMBRE,\n" +
-                "    c.MANA_COST,\n" +
-                "    c.CMC,\n" +
-                "    c.COLOR,\n" +
-                "    c.COLOR_IDENTITY,\n" +
-                "    c.PODER,\n" +
-                "    c.RESISTENCIA,\n" +
-                "    t.ID_TYPE,\n" +
-                "    t.TYPE_NAME,\n" +
-                "    r.ID_RAREZA,\n" +
-                "    r.NOMBRE_RAREZA,\n" +
-                "    s.ID_SET,\n" +
-                "    s.SET_NAME,\n" +
-                "    c.PRECIO\n" +
-                "    FROM t_cards as c INNER JOIN t_type as t\n" +
-                "\t\t\t\t\tON c.TIPO=t.ID_TYPE\n" +
-                "                    INNER JOIN t_rareza as r\n" +
-                "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
-                "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
-                "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
-                "\tWHERE c.NOMBRE = ?\n" +
-                "\tORDER BY c.ID_CARD;";
-        PreparedStatement ps;
-        try {
-            ps = crearConexion().prepareStatement(query);
+        String query = "SELECT c.ID_CARD, c.NOMBRE, c.MANA_COST, c.CMC, c.COLOR, c.COLOR_IDENTITY, " +
+                "c.PODER, c.RESISTENCIA, t.ID_TYPE, t.TYPE_NAME, r.ID_RAREZA, r.NOMBRE_RAREZA, " +
+                "s.ID_SET, s.SET_NAME, c.PRECIO " +
+                "FROM t_cards as c " +
+                "INNER JOIN t_type as t ON c.TIPO = t.ID_TYPE " +
+                "INNER JOIN t_rareza as r ON c.RAREZA = r.ID_RAREZA " +
+                "INNER JOIN t_set as s ON c.CARD_SET = s.ID_SET " +
+                "WHERE c.NOMBRE = ?\n" +
+                "ORDER BY c.ID_CARD DESC;";
+        try (Connection conn = crearConexion();
+             PreparedStatement ps = conn.prepareStatement(query)){
+
             ps.setString(1, cardName);
-            ResultSet rs = ps.executeQuery(query);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
                 String nombre = rs.getString("NOMBRE");
@@ -396,7 +381,7 @@ public class Connect {
         try {
             ps = crearConexion().prepareStatement(query);
             ps.setString(1, cardName);
-            ResultSet rs = ps.executeQuery(query);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
                 String nombre = rs.getString("NOMBRE");
@@ -449,7 +434,7 @@ public class Connect {
         PreparedStatement ps;
         try {
             ps = crearConexion().prepareStatement(query);
-            ResultSet rs = ps.executeQuery(query);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
                 String nombre = rs.getString("NOMBRE");
@@ -501,7 +486,7 @@ public class Connect {
         PreparedStatement ps;
         try {
             ps = crearConexion().prepareStatement(query);
-            ResultSet rs = ps.executeQuery(query);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
                 String nombre = rs.getString("NOMBRE");
@@ -556,7 +541,7 @@ public class Connect {
         try {
             ps = crearConexion().prepareStatement(query);
             ps.setString(1, cardName);
-            ResultSet rs = ps.executeQuery(query);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
                 String nombre = rs.getString("NOMBRE");
@@ -580,7 +565,7 @@ public class Connect {
         return selectedCard;
     }
 
-    public static List<Card> searchCardsBySet(String setName){
+    public static List<Card> searchCardsBySet(int setID){
         List<Card> selectedCards = new ArrayList<>();
         String query = "SELECT \n" +
                 "\tc.ID_CARD,\n" +
@@ -604,13 +589,13 @@ public class Connect {
                 "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
                 "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
                 "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
-                "\tWHERE s.SET_NAME = ?\n" +
+                "\tWHERE s.ID_SET = ?\n" +
                 "\tORDER BY c.PRECIO DESC;";
         PreparedStatement ps;
         try {
             ps = crearConexion().prepareStatement(query);
-            ps.setString(1, setName);
-            ResultSet rs = ps.executeQuery(query);
+            ps.setInt(1, setID);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
                 String nombre = rs.getString("NOMBRE");
@@ -634,7 +619,7 @@ public class Connect {
         return selectedCards;
     }
 
-    public static List<Card> searchCardsBySetAndName(String setName, String cardName){
+    public static List<Card> searchCardsBySetAndName(int setID, String cardName){
         List<Card> selectedCards = new ArrayList<>();
         String query = "SELECT \n" +
                 "\tc.ID_CARD,\n" +
@@ -658,14 +643,14 @@ public class Connect {
                 "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
                 "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
                 "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
-                "\tWHERE s.SET_NAME = ? AND c.NOMBRE = ?\n" +
+                "\tWHERE s.ID_SET = ? AND c.NOMBRE = ?\n" +
                 "\tORDER BY c.PRECIO DESC;";
         PreparedStatement ps;
         try {
             ps = crearConexion().prepareStatement(query);
-            ps.setString(1, setName);
+            ps.setInt(1, setID);
             ps.setString(2, cardName);
-            ResultSet rs = ps.executeQuery(query);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
                 String nombre = rs.getString("NOMBRE");
@@ -687,5 +672,20 @@ public class Connect {
             e.printStackTrace();
         }
         return selectedCards;
+    }
+
+    public static List<String> getNombreCartas() {
+        List<String> cartas = new ArrayList<>();
+        String query = "SELECT NOMBRE FROM T_CARDS";
+        try (Connection con = crearConexion();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                cartas.add(rs.getString("NOMBRE"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cartas;
     }
 }

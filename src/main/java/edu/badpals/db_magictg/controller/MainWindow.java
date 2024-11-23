@@ -26,6 +26,9 @@ public class MainWindow  {
     private TextField TxtCardName;
 
     @FXML
+    private Button BtnBuscarCarta;
+
+    @FXML
     private ComboBox ChkFiltrarPor;
 
     @FXML
@@ -74,6 +77,8 @@ public class MainWindow  {
     private TableColumn<Card, String> columnaSet;
     @FXML
     private TableColumn<Card, String> columnaPrecio;
+
+
 
     @FXML
     public void initialize() {
@@ -178,7 +183,25 @@ public class MainWindow  {
         currentStage.close();
     }
 
+    @FXML
+    private void buscarCarta() {
+        String nombreCarta = TxtCardName.getText().trim();
+        if (nombreCarta.isEmpty()) {
+            Alerts.newAlert(Alert.AlertType.ERROR, "El campo está vacío", "Por favor, introduce un nombre de carta.");
+            return;
+        }
 
+        List<String> nombresCartas = Connect.getNombreCartas();
+
+        // Verificar si el nombre existe en la lista
+        if (nombresCartas.contains(nombreCarta)) {
+            List<Card> cardList = Connect.searchCardByName(nombreCarta);
+            ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
+            tableViewCards.setItems(cards);
+        } else {
+            Alerts.newAlert(Alert.AlertType.ERROR, "La carta no existe", "El nombre ingresado no coincide con ninguna carta.");
+        }
+    }
 
 
 

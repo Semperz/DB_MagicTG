@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -38,7 +40,14 @@
                   <TableColumn fx:id="columnaPrecio" prefWidth="105.0" text="PRECIO" />
               </columns>
             </TableView>
-            <ComboBox fx:id="CmbFiltrarPor" layoutX="499.0" layoutY="123.0" prefWidth="150.0" promptText="Precio Ascendete" />
+            <ComboBox fx:id="CmbFiltrarPor" layoutX="499.0" layoutY="123.0" prefWidth="150.0" promptText="Selecciona un tipo de ordenación">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Precio Ascendente" />
+                            <String fx:value="Precio Descendente" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
             <Label layoutX="395.0" layoutY="122.0" text="Filtrar por:">
                <font>
                   <Font size="18.0" />
@@ -57,7 +66,7 @@
             </Label>
             <TextField fx:id="TxtCardName" layoutX="182.0" layoutY="123.0" promptText="Nombre de la carta" />
             <Button fx:id="BtnToLogIn" layoutX="915.0" layoutY="720.0" mnemonicParsing="false" onAction="#toLogIn" text="Volver" />
-            <Button fx:id="BtnBuscarCara" layoutX="338.0" layoutY="125.0" mnemonicParsing="false" text="Ok" />
+            <Button fx:id="BtnBuscarCarta" layoutX="338.0" layoutY="125.0" mnemonicParsing="false" onAction="#buscarCarta" text="Ok" />
          </children>
       </AnchorPane>
    </children>
