@@ -5,25 +5,25 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="902.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="972.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.MainWindow">
    <children>
-      <AnchorPane prefHeight="863.0" prefWidth="1274.0">
+      <AnchorPane prefHeight="799.0" prefWidth="972.0">
          <children>
-            <Button layoutX="140.0" layoutY="750.0" mnemonicParsing="false" text="Insertar" />
-            <Button layoutX="299.0" layoutY="750.0" mnemonicParsing="false" text="Modificar" />
-            <Button layoutX="522.0" layoutY="750.0" mnemonicParsing="false" text="Eliminar" />
-            <Button layoutX="700.0" layoutY="750.0" mnemonicParsing="false" text="Exportar" />
-            <Label layoutX="256.0" layoutY="14.0" text="BASE DE DATOS MAGIC THE GATERING">
+            <Button fx:id="BtnInsertar" layoutX="154.0" layoutY="705.0" mnemonicParsing="false" onAction="#toInsertView" text="Insertar" />
+            <Button fx:id="BtnModificar" layoutX="320.0" layoutY="706.0" mnemonicParsing="false" onAction="#toModifyView" text="Modificar" />
+            <Button fx:id="BtnEliminar" layoutX="547.0" layoutY="707.0" mnemonicParsing="false" onAction="#toDeleteView" text="Eliminar" />
+            <Button fx:id="BtnExportar" layoutX="742.0" layoutY="706.0" mnemonicParsing="false" onAction="#toExportView" text="Exportar" />
+            <Label layoutX="118.0" layoutY="27.0" text="BASE DE DATOS MAGIC THE GATERING">
                <font>
                   <Font size="45.0" />
                </font>
             </Label>
-            <TableView layoutX="37.0" layoutY="178.0" prefHeight="559.0" prefWidth="880.0">
+            <TableView fx:id="TabCard" layoutX="46.0" layoutY="178.0" prefHeight="474.0" prefWidth="880.0">
               <columns>
                 <TableColumn prefWidth="59.0" text="ID" />
                 <TableColumn prefWidth="156.0" text="NOMBRE" />
@@ -38,8 +38,26 @@
                   <TableColumn prefWidth="105.0" text="PRECIO" />
               </columns>
             </TableView>
-            <ImageView fitHeight="458.0" fitWidth="337.0" layoutX="934.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" />
-            <ComboBox layoutX="767.0" layoutY="123.0" prefWidth="150.0" promptText="Cartas" />
+            <ComboBox fx:id="CmbFiltrarPor" layoutX="499.0" layoutY="123.0" prefWidth="150.0" promptText="Nombe" />
+            <Label layoutX="395.0" layoutY="122.0" text="Filtrar por:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="CmbSet" layoutX="730.0" layoutY="123.0" prefWidth="150.0" promptText="Set" />
+            <Label layoutX="685.0" layoutY="122.0" text="Set:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="64.0" layoutY="122.0" text="Buscar Carta:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="TxtCardName" layoutX="182.0" layoutY="123.0" promptText="Nombre de la carta" />
+            <Button fx:id="BtnToLogIn" layoutX="915.0" layoutY="720.0" mnemonicParsing="false" onAction="#toLogIn" text="Volver" />
+            <Button fx:id="BtnBuscarCara" layoutX="338.0" layoutY="125.0" mnemonicParsing="false" text="Ok" />
          </children>
       </AnchorPane>
    </children>

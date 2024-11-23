@@ -3,6 +3,8 @@ module edu.badpals.db_magictg {
     requires javafx.fxml;
     requires com.fasterxml.jackson.databind;
     requires java.sql;
+    requires javafx.graphics;
+    requires java.xml;
 
 
     opens edu.badpals.db_magictg to javafx.fxml;
