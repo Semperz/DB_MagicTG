@@ -2,6 +2,8 @@ package edu.badpals.db_magictg.controller;
 
 import edu.badpals.db_magictg.conexion.Connect;
 import edu.badpals.db_magictg.model.Card;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainWindow  {
 
@@ -49,11 +53,11 @@ public class MainWindow  {
 
     // Definir las columnas
     @FXML
-    private TableColumn<Card, Integer> columnaID;
+    private TableColumn<Card, String> columnaID;
     @FXML
     private TableColumn<Card, String> columnaNombre;
     @FXML
-    private TableColumn<Card, Integer> columnaManaCost;
+    private TableColumn<Card, String> columnaManaCost;
     @FXML
     private TableColumn<Card, String> columnaColor;
     @FXML
@@ -71,25 +75,43 @@ public class MainWindow  {
     @FXML
     private TableColumn<Card, String> columnaPrecio;
 
-//    @FXML
-//    public void initialize() {
-//        // Configurar las columnas con los métodos getter correspondientes
-//        columnaID.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        columnaNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
-//        columnaManaCost.setCellValueFactory(new PropertyValueFactory<>("manaCost"));
-//        columnaColor.setCellValueFactory(new PropertyValueFactory<>("color"));
-//        columnaIC.setCellValueFactory(new PropertyValueFactory<>("ic"));
-//        columnaPoder.setCellValueFactory(new PropertyValueFactory<>("power"));
-//        columnaResistencia.setCellValueFactory(new PropertyValueFactory<>("resistance"));
-//        columnaTipo.setCellValueFactory(new PropertyValueFactory<>("type"));
-//        columnaRareza.setCellValueFactory(new PropertyValueFactory<>("rarity"));
-//        columnaSet.setCellValueFactory(new PropertyValueFactory<>("set"));
-//        columnaPrecio.setCellValueFactory(new PropertyValueFactory<>("price"));
-//
-//        // Cargar los datos en la tabla
-//        ObservableList<Card> cards = (ObservableList<Card>) Connect.readAllCards();
-//        tableViewCards.setItems(cards);
-//    }
+    @FXML
+    public void initialize() {
+        // Configurar las columnas con los métodos getter correspondientes
+        columnaID.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getId_card()))
+        );
+        columnaNombre.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getNombre())
+        );
+        columnaManaCost.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getMana_cost())
+        );
+        columnaColor.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getColor())
+        );
+        columnaIC.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getColor_identity())
+        );
+        columnaPoder.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getPoder()))
+        );
+        columnaResistencia.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getResistencia()))
+        );
+        // Configuración de columnas con objetos personalizados
+        columnaTipo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTipo().getName_type()));
+        columnaRareza.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRareza().getName_rarity()));
+        columnaSet.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCard_set().getName_set()));
+
+        columnaPrecio.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecio())));
+
+
+        // Cargar los datos en la tabla
+        List<Card> cardList = Connect.readAllCards();
+        ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
+        tableViewCards.setItems(cards);
+    }
 
 
 

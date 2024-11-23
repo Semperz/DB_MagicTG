@@ -1,0 +1,3 @@
+ArrayList<MyObject> list = getMyObjectList();
+ObservableList<MyObject> observableList = FXCollections.observableArrayList(list);
+tableView.setItems(observableList);

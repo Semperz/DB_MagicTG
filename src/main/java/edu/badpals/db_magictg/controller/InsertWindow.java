@@ -91,7 +91,13 @@ public class InsertWindow {
         try {
             precioFloat = Float.parseFloat(precio);
         } catch (NumberFormatException e) {
-            System.out.println("El precio no es válido.");
+            Alerts.newAlert(Alert.AlertType.ERROR, "Precio Inválido", "El precio debe ser un número válido.");
+            return;
+        }
+
+        // Verificar si todos los campos obligatorios están llenos
+        if (nombre.isEmpty() || set == null || tipo == null || rareza == null) {
+            Alerts.newAlert(Alert.AlertType.ERROR, "Campos Vacíos", "Todos los campos son obligatorios.");
             return;
         }
 
@@ -100,13 +106,21 @@ public class InsertWindow {
         String color = buildColor(mcAzul, mcRojo, mcVerde, mcNegro, mcBlanco);
         String colorIdentity = buildColorIdentity(icAzul, icRojo, icVerde, icNegro, icBlanco, mcAzul, mcRojo, mcVerde, mcNegro, mcBlanco);
 
-        // Insertar la carta en la base de datos
-        Connect.insertCard(nombre, manaCost, mcAzul + mcRojo + mcVerde + mcNegro + mcBlanco + mcIncoloro, color, colorIdentity,
-                poder, resistencia, tipoId, rarezaId, setId, precioFloat);
+        try {
+            // Insertar la carta en la base de datos
+            Connect.insertCard(nombre, manaCost, mcAzul + mcRojo + mcVerde + mcNegro + mcBlanco + mcIncoloro, color, colorIdentity,
+                    poder, resistencia, tipoId, rarezaId, setId, precioFloat);
+            Alerts.newAlert(Alert.AlertType.INFORMATION, "Carta Añadida", "La carta '" + nombre + "' ha sido añadida correctamente.");
 
-        // Vaciar los campos después de añadir la carta
-        clearFields();
+            // Vaciar los campos después de añadir la carta
+            clearFields();
+        } catch (Exception e) {
+            // En caso de cualquier error al insertar la carta
+            e.printStackTrace();
+            Alerts.newAlert(Alert.AlertType.ERROR, "Error al Añadir Carta", "Ocurrió un error al intentar añadir la carta. Detalles: " + e.getMessage());
+        }
     }
+
 
     public static String buildManaCost(int mcAzul, int mcRojo, int mcVerde, int mcNegro, int mcBlanco, int mcIncoloro) {
         StringBuilder manaCost = new StringBuilder();

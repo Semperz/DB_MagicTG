@@ -23,19 +23,19 @@
                   <Font size="45.0" />
                </font>
             </Label>
-            <TableView fx:id="TabCard" layoutX="46.0" layoutY="178.0" prefHeight="474.0" prefWidth="880.0">
+            <TableView fx:id="tableViewCards" layoutX="46.0" layoutY="178.0" prefHeight="474.0" prefWidth="880.0">
               <columns>
-                <TableColumn prefWidth="59.0" text="ID" />
-                <TableColumn prefWidth="156.0" text="NOMBRE" />
-                  <TableColumn prefWidth="93.0" text="MANA COST" />
-                  <TableColumn prefWidth="62.0" text="COLOR" />
-                  <TableColumn prefWidth="86.0" text="IC" />
-                  <TableColumn prefWidth="47.0" text="PODER" />
-                  <TableColumn prefWidth="94.0" text="RESISTENCIA" />
-                  <TableColumn prefWidth="57.0" text="TIPO" />
-                  <TableColumn prefWidth="58.0" text="RAREZA" />
-                  <TableColumn prefWidth="60.0" text="SET" />
-                  <TableColumn prefWidth="105.0" text="PRECIO" />
+                <TableColumn fx:id="columnaID" prefWidth="59.0" text="ID" />
+                <TableColumn fx:id="columnaNombre" prefWidth="156.0" text="NOMBRE" />
+                  <TableColumn fx:id="columnaManaCost" prefWidth="93.0" text="MANA COST" />
+                  <TableColumn fx:id="columnaColor" prefWidth="62.0" text="COLOR" />
+                  <TableColumn fx:id="columnaIC" prefWidth="86.0" text="IC" />
+                  <TableColumn fx:id="columnaPoder" prefWidth="47.0" text="PODER" />
+                  <TableColumn fx:id="columnaResistencia" prefWidth="94.0" text="RESISTENCIA" />
+                  <TableColumn fx:id="columnaTipo" prefWidth="57.0" text="TIPO" />
+                  <TableColumn fx:id="columnaRareza" prefWidth="58.0" text="RAREZA" />
+                  <TableColumn fx:id="columnaSet" prefWidth="60.0" text="SET" />
+                  <TableColumn fx:id="columnaPrecio" prefWidth="105.0" text="PRECIO" />
               </columns>
             </TableView>
             <ComboBox fx:id="CmbFiltrarPor" layoutX="499.0" layoutY="123.0" prefWidth="150.0" promptText="Precio Ascendete" />
