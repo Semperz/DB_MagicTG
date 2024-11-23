@@ -23,6 +23,9 @@ import java.util.List;
 public class MainWindow  {
 
     @FXML
+    private ComboBox<String> CmbSet;
+
+    @FXML
     private TextField TxtCardName;
 
     @FXML
@@ -116,6 +119,11 @@ public class MainWindow  {
         List<Card> cardList = Connect.readAllCards();
         ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
         tableViewCards.setItems(cards);
+
+
+        //Cargar combobox sets
+        CmbSet.getItems().addAll(Connect.getSets());
+
     }
 
 
