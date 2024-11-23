@@ -46,12 +46,6 @@ public class InsertWindow {
     @FXML
     private Spinner<Integer> Sp_McIncoloro;
     @FXML
-    private CheckBox Chk_McPrirexiano;
-    @FXML
-    private CheckBox Chk_McDoble;
-    @FXML
-    private ComboBox<String> Cmb_McDoble;
-    @FXML
     private CheckBox Chk_IcAzul;
     @FXML
     private CheckBox Chk_IcRojo;
@@ -103,8 +97,8 @@ public class InsertWindow {
 
         // Construir la cadena de coste de maná y color
         String manaCost = buildManaCost(mcAzul, mcRojo, mcVerde, mcNegro, mcBlanco, mcIncoloro);
-        String color = buildColor(icAzul, icRojo, icVerde, icNegro, icBlanco);
-        String colorIdentity = buildColorIdentity(icAzul, icRojo, icVerde, icNegro, icBlanco);
+        String color = buildColor(mcAzul, mcRojo, mcVerde, mcNegro, mcBlanco);
+        String colorIdentity = buildColorIdentity(icAzul, icRojo, icVerde, icNegro, icBlanco, mcAzul, mcRojo, mcVerde, mcNegro, mcBlanco);
 
         // Insertar la carta en la base de datos
         Connect.insertCard(nombre, manaCost, mcAzul + mcRojo + mcVerde + mcNegro + mcBlanco + mcIncoloro, color, colorIdentity,
@@ -117,8 +111,8 @@ public class InsertWindow {
     public static String buildManaCost(int mcAzul, int mcRojo, int mcVerde, int mcNegro, int mcBlanco, int mcIncoloro) {
         StringBuilder manaCost = new StringBuilder();
 
-        // Añadir el valor de maná incoloro al principio entre {}
-        if (mcIncoloro > 0) manaCost.append("{").append(mcIncoloro).append("}");
+        // Añadir el valor de maná incoloro al principio como un número
+        if (mcIncoloro > 0) manaCost.append(mcIncoloro);
 
         // Añadir los valores de maná por color
         if (mcAzul > 0) manaCost.append("{U}".repeat(mcAzul));
@@ -132,33 +126,37 @@ public class InsertWindow {
 
 
 
-    public static String buildColorIdentity(boolean icAzul, boolean icRojo, boolean icVerde, boolean icNegro, boolean icBlanco) {
-        StringBuilder colorIdentity = new StringBuilder();
-
-        if (icAzul) colorIdentity.append("U");
-        if (icRojo) colorIdentity.append("R");
-        if (icVerde) colorIdentity.append("G");
-        if (icNegro) colorIdentity.append("B");
-        if (icBlanco) colorIdentity.append("W");
-
-        return colorIdentity.toString();
-    }
-
-    public static String buildColor(boolean icAzul, boolean icRojo, boolean icVerde, boolean icNegro, boolean icBlanco) {
+    public static String buildColor(int mcAzul, int mcRojo, int mcVerde, int mcNegro, int mcBlanco) {
         StringBuilder color = new StringBuilder();
 
-        if (icAzul) color.append("Azul, ");
-        if (icRojo) color.append("Rojo, ");
-        if (icVerde) color.append("Verde, ");
-        if (icNegro) color.append("Negro, ");
-        if (icBlanco) color.append("Blanco, ");
+        if (mcAzul > 0) color.append("Azul, ");
+        if (mcRojo > 0) color.append("Rojo, ");
+        if (mcVerde > 0) color.append("Verde, ");
+        if (mcNegro > 0) color.append("Negro, ");
+        if (mcBlanco > 0) color.append("Blanco, ");
 
         // Eliminar la última coma y espacio, si existe
         if (color.length() > 0) {
             color.setLength(color.length() - 2);
         }
 
+        else {
+            color.append("Incoloro");
+        }
+
         return color.toString();
+    }
+
+    public static String buildColorIdentity(boolean icAzul, boolean icRojo, boolean icVerde, boolean icNegro, boolean icBlanco, int mcAzul, int mcRojo, int mcVerde, int mcNegro, int mcBlanco) {
+        StringBuilder colorIdentity = new StringBuilder();
+
+        if (icAzul || mcAzul > 0) colorIdentity.append("U");
+        if (icRojo || mcRojo > 0) colorIdentity.append("R");
+        if (icVerde || mcVerde > 0) colorIdentity.append("G");
+        if (icNegro || mcNegro > 0) colorIdentity.append("B");
+        if (icBlanco || mcBlanco > 0) colorIdentity.append("W");
+
+        return colorIdentity.toString();
     }
 
 
@@ -179,9 +177,6 @@ public class InsertWindow {
         Sp_McNegro.getValueFactory().setValue(0);
         Sp_McBlanco.getValueFactory().setValue(0);
         Sp_McIncoloro.getValueFactory().setValue(0);
-        Chk_McPrirexiano.setSelected(false);
-        Chk_McDoble.setSelected(false);
-        Cmb_McDoble.setValue(null);
         Chk_IcAzul.setSelected(false);
         Chk_IcRojo.setSelected(false);
         Chk_IcVerde.setSelected(false);

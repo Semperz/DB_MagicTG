@@ -1,5 +1,8 @@
 package edu.badpals.db_magictg.controller;
 
+import edu.badpals.db_magictg.conexion.Connect;
+import edu.badpals.db_magictg.model.Card;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
@@ -37,6 +41,55 @@ public class MainWindow  {
 
     @FXML
     private Button BtnExportar;
+
+
+    //Tabla
+    @FXML
+    private TableView<Card> tableViewCards;
+
+    // Definir las columnas
+    @FXML
+    private TableColumn<Card, Integer> columnaID;
+    @FXML
+    private TableColumn<Card, String> columnaNombre;
+    @FXML
+    private TableColumn<Card, Integer> columnaManaCost;
+    @FXML
+    private TableColumn<Card, String> columnaColor;
+    @FXML
+    private TableColumn<Card, String> columnaIC;
+    @FXML
+    private TableColumn<Card, String> columnaPoder;
+    @FXML
+    private TableColumn<Card, String> columnaResistencia;
+    @FXML
+    private TableColumn<Card, String> columnaTipo;
+    @FXML
+    private TableColumn<Card, String> columnaRareza;
+    @FXML
+    private TableColumn<Card, String> columnaSet;
+    @FXML
+    private TableColumn<Card, String> columnaPrecio;
+
+//    @FXML
+//    public void initialize() {
+//        // Configurar las columnas con los métodos getter correspondientes
+//        columnaID.setCellValueFactory(new PropertyValueFactory<>("id"));
+//        columnaNombre.setCellValueFactory(new PropertyValueFactory<>("name"));
+//        columnaManaCost.setCellValueFactory(new PropertyValueFactory<>("manaCost"));
+//        columnaColor.setCellValueFactory(new PropertyValueFactory<>("color"));
+//        columnaIC.setCellValueFactory(new PropertyValueFactory<>("ic"));
+//        columnaPoder.setCellValueFactory(new PropertyValueFactory<>("power"));
+//        columnaResistencia.setCellValueFactory(new PropertyValueFactory<>("resistance"));
+//        columnaTipo.setCellValueFactory(new PropertyValueFactory<>("type"));
+//        columnaRareza.setCellValueFactory(new PropertyValueFactory<>("rarity"));
+//        columnaSet.setCellValueFactory(new PropertyValueFactory<>("set"));
+//        columnaPrecio.setCellValueFactory(new PropertyValueFactory<>("price"));
+//
+//        // Cargar los datos en la tabla
+//        ObservableList<Card> cards = (ObservableList<Card>) Connect.readAllCards();
+//        tableViewCards.setItems(cards);
+//    }
 
 
 

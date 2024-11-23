@@ -50,10 +50,6 @@ public class DeleteWindow {
                 if (exito) {
                     // Éxito al eliminar la carta
                     Alerts.newAlert(Alert.AlertType.INFORMATION, "Carta Eliminada", "La carta con ID " + cardId + " y nombre '" + nombre + "' ha sido eliminada.");
-
-                    // Cerrar la ventana actual después de eliminar la carta
-                    Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    currentStage.close(); // Cierra la ventana
                 } else {
                     // Si no se pudo eliminar la carta por algún motivo
                     Alerts.newAlert(Alert.AlertType.ERROR, "Error al Eliminar", "No se pudo eliminar la carta con el ID " + cardId + ".");

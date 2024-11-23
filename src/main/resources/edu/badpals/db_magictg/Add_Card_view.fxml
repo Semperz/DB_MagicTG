@@ -28,8 +28,8 @@
                 <Label layoutX="134.0" layoutY="340.0" text="Precio:" />
                 <Label layoutX="144.0" layoutY="159.0" text="Poder:" />
                 <Label layoutX="115.0" layoutY="203.0" text="Resistencia:" />
-                <Label layoutX="79.0" layoutY="384.0" text="Identidad de color:" />
-                <Label layoutX="507.0" layoutY="124.0" text="Mana Cost:" />
+                <Label layoutX="257.0" layoutY="406.0" text="Identidad de color:" />
+                <Label layoutX="534.0" layoutY="146.0" text="Mana Cost:" />
                 <TextField fx:id="Txt_Nombre" layoutX="186.0" layoutY="117.0" prefHeight="25.0" prefWidth="271.0" />
                 <ComboBox fx:id="Cmb_Set" layoutX="185.0" layoutY="230.0" prefWidth="150.0" />
                 <ComboBox fx:id="Cmb_Tipo" layoutX="185.0" layoutY="266.0" prefWidth="150.0" />
@@ -37,26 +37,23 @@
                 <TextField fx:id="Txt_Precio" layoutX="186.0" layoutY="336.0" />
                 <Spinner fx:id="Sp_Poder" layoutX="188.0" layoutY="155.0" prefHeight="25.0" prefWidth="51.0" />
                 <Spinner fx:id="Sp_Resistencia" layoutX="187.0" layoutY="195.0" prefHeight="25.0" prefWidth="51.0" />
-                <Label layoutX="598.0" layoutY="124.0" text="Azul" />
-                <Label layoutX="597.0" layoutY="165.0" text="Rojo" />
-                <Label layoutX="593.0" layoutY="213.0" text="Verde" />
-                <Label layoutX="592.0" layoutY="248.0" text="Negro" />
-                <Label layoutX="592.0" layoutY="286.0" text="Blanco" />
-                <Label layoutX="588.0" layoutY="326.0" text="Incoloros" />
-                <Spinner fx:id="Sp_McAzul" layoutX="657.0" layoutY="120.0" prefHeight="25.0" prefWidth="51.0" />
-                <Spinner fx:id="Sp_McRojo" layoutX="657.0" layoutY="161.0" prefHeight="25.0" prefWidth="51.0" />
-                <Spinner fx:id="Sp_McVerde" layoutX="657.0" layoutY="209.0" prefHeight="25.0" prefWidth="51.0" />
-                <Spinner fx:id="Sp_McNegro" layoutX="657.0" layoutY="244.0" prefHeight="25.0" prefWidth="51.0" />
-                <Spinner fx:id="Sp_McBlanco" layoutX="657.0" layoutY="278.0" prefHeight="25.0" prefWidth="51.0" />
-                <Spinner fx:id="Sp_McIncoloro" layoutX="657.0" layoutY="322.0" prefHeight="25.0" prefWidth="51.0" />
-                <CheckBox fx:id="Chk_McPrirexiano" layoutX="549.0" layoutY="365.0" mnemonicParsing="false" text="Pirexiano" />
-                <CheckBox fx:id="Chk_McDoble" layoutX="643.0" layoutY="365.0" mnemonicParsing="false" text="Doble" />
-                <ComboBox fx:id="Cmb_McDoble" layoutX="712.0" layoutY="361.0" prefHeight="25.0" prefWidth="104.0" />
-                <CheckBox fx:id="Chk_IcAzul" layoutX="106.0" layoutY="417.0" mnemonicParsing="false" text="Azul" />
-                <CheckBox fx:id="Chk_IcRojo" layoutX="162.0" layoutY="417.0" mnemonicParsing="false" text="Rojo" />
-                <CheckBox fx:id="Chk_IcVerde" layoutX="212.0" layoutY="417.0" mnemonicParsing="false" text="Verde" />
-                <CheckBox fx:id="Chk_IcNegro" layoutX="280.0" layoutY="417.0" mnemonicParsing="false" text="Negro" />
-                <CheckBox fx:id="Chk_IcBlanco" layoutX="345.0" layoutY="417.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="59.0" text="Blanco" />
+                <Label layoutX="625.0" layoutY="146.0" text="Azul" />
+                <Label layoutX="624.0" layoutY="187.0" text="Rojo" />
+                <Label layoutX="620.0" layoutY="235.0" text="Verde" />
+                <Label layoutX="619.0" layoutY="270.0" text="Negro" />
+                <Label layoutX="619.0" layoutY="308.0" text="Blanco" />
+                <Label layoutX="615.0" layoutY="348.0" text="Incoloros" />
+                <Spinner fx:id="Sp_McAzul" layoutX="684.0" layoutY="142.0" prefHeight="25.0" prefWidth="51.0" />
+                <Spinner fx:id="Sp_McRojo" layoutX="684.0" layoutY="183.0" prefHeight="25.0" prefWidth="51.0" />
+                <Spinner fx:id="Sp_McVerde" layoutX="684.0" layoutY="231.0" prefHeight="25.0" prefWidth="51.0" />
+                <Spinner fx:id="Sp_McNegro" layoutX="684.0" layoutY="266.0" prefHeight="25.0" prefWidth="51.0" />
+                <Spinner fx:id="Sp_McBlanco" layoutX="684.0" layoutY="300.0" prefHeight="25.0" prefWidth="51.0" />
+                <Spinner fx:id="Sp_McIncoloro" layoutX="684.0" layoutY="344.0" prefHeight="25.0" prefWidth="51.0" />
+                <CheckBox fx:id="Chk_IcAzul" layoutX="284.0" layoutY="439.0" mnemonicParsing="false" text="Azul" />
+                <CheckBox fx:id="Chk_IcRojo" layoutX="340.0" layoutY="439.0" mnemonicParsing="false" text="Rojo" />
+                <CheckBox fx:id="Chk_IcVerde" layoutX="390.0" layoutY="439.0" mnemonicParsing="false" text="Verde" />
+                <CheckBox fx:id="Chk_IcNegro" layoutX="458.0" layoutY="439.0" mnemonicParsing="false" text="Negro" />
+                <CheckBox fx:id="Chk_IcBlanco" layoutX="523.0" layoutY="439.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="59.0" text="Blanco" />
             </children>
         </AnchorPane>
     </children>
