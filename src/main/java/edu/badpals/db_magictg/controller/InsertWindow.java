@@ -1,5 +1,6 @@
 package edu.badpals.db_magictg.controller;
 
+import edu.badpals.db_magictg.conexion.Connect;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+
+import static edu.badpals.db_magictg.conexion.Connect.getRarezaId;
 
 public class InsertWindow {
 
@@ -59,18 +62,11 @@ public class InsertWindow {
     @FXML
     private CheckBox Chk_IcBlanco;
 
-    // Acción para volver a la ventana anterior
-    @FXML
-    public void volver(ActionEvent event) {
-        // Obtener el stage actual (ventana)
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.close(); // Cerrar la ventana actual
-    }
 
     // Acción para añadir carta a la base de datos (lógica personalizada)
     @FXML
     public void addCard(ActionEvent event) {
-        // Obtener valores de los campos
+        // Obtener los valores de los campos
         String nombre = Txt_Nombre.getText();
         String set = Cmb_Set.getValue();
         String tipo = Cmb_Tipo.getValue();
@@ -85,47 +81,90 @@ public class InsertWindow {
         int mcBlanco = Sp_McBlanco.getValue();
         int mcIncoloro = Sp_McIncoloro.getValue();
 
-        // Obtener valores de las CheckBoxes
-        boolean mcPrirexiano = Chk_McPrirexiano.isSelected();
-        boolean mcDoble = Chk_McDoble.isSelected();
-        String mcDobleValor = Cmb_McDoble.getValue();
+        // Obtener los IDs de Rareza, Set y Tipo desde las tablas respectivas
+        int rarezaId = Connect.getRarezaId(rareza);
+        int setId = Connect.getSetId(set);
+        int tipoId = Connect.getTipoId(tipo);
+
         boolean icAzul = Chk_IcAzul.isSelected();
         boolean icRojo = Chk_IcRojo.isSelected();
         boolean icVerde = Chk_IcVerde.isSelected();
         boolean icNegro = Chk_IcNegro.isSelected();
         boolean icBlanco = Chk_IcBlanco.isSelected();
 
-        // Mostrar los valores obtenidos por consola
-        System.out.println("Carta añadida: ");
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Set: " + set);
-        System.out.println("Tipo: " + tipo);
-        System.out.println("Rareza: " + rareza);
-        System.out.println("Precio: " + precio);
-        System.out.println("Poder: " + poder);
-        System.out.println("Resistencia: " + resistencia);
-        System.out.println("Maná Azul: " + mcAzul);
-        System.out.println("Maná Rojo: " + mcRojo);
-        System.out.println("Maná Verde: " + mcVerde);
-        System.out.println("Maná Negro: " + mcNegro);
-        System.out.println("Maná Blanco: " + mcBlanco);
-        System.out.println("Maná Incoloro: " + mcIncoloro);
-        System.out.println("¿Prirexiano?: " + mcPrirexiano);
-        System.out.println("¿Doble?: " + mcDoble);
-        System.out.println("Valor Doble: " + mcDobleValor);
-        System.out.println("¿Ic Azul?: " + icAzul);
-        System.out.println("¿Ic Rojo?: " + icRojo);
-        System.out.println("¿Ic Verde?: " + icVerde);
-        System.out.println("¿Ic Negro?: " + icNegro);
-        System.out.println("¿Ic Blanco?: " + icBlanco);
+        // Convertir el precio a un valor flotante
+        float precioFloat = 0;
+        try {
+            precioFloat = Float.parseFloat(precio);
+        } catch (NumberFormatException e) {
+            System.out.println("El precio no es válido.");
+            return;
+        }
 
-        // Aquí se puede agregar la lógica para almacenar la carta en la base de datos
+        // Construir la cadena de coste de maná y color
+        String manaCost = buildManaCost(mcAzul, mcRojo, mcVerde, mcNegro, mcBlanco, mcIncoloro);
+        String color = buildColor(icAzul, icRojo, icVerde, icNegro, icBlanco);
+        String colorIdentity = buildColorIdentity(icAzul, icRojo, icVerde, icNegro, icBlanco);
+
+        // Insertar la carta en la base de datos
+        Connect.insertCard(nombre, manaCost, mcAzul + mcRojo + mcVerde + mcNegro + mcBlanco + mcIncoloro, color, colorIdentity,
+                poder, resistencia, tipoId, rarezaId, setId, precioFloat);
 
         // Vaciar los campos después de añadir la carta
         clearFields();
     }
 
-    // Método para vaciar los campos del formulario
+    public static String buildManaCost(int mcAzul, int mcRojo, int mcVerde, int mcNegro, int mcBlanco, int mcIncoloro) {
+        StringBuilder manaCost = new StringBuilder();
+
+        // Añadir el valor de maná incoloro al principio entre {}
+        if (mcIncoloro > 0) manaCost.append("{").append(mcIncoloro).append("}");
+
+        // Añadir los valores de maná por color
+        if (mcAzul > 0) manaCost.append("{U}".repeat(mcAzul));
+        if (mcRojo > 0) manaCost.append("{R}".repeat(mcRojo));
+        if (mcVerde > 0) manaCost.append("{G}".repeat(mcVerde));
+        if (mcNegro > 0) manaCost.append("{B}".repeat(mcNegro));
+        if (mcBlanco > 0) manaCost.append("{W}".repeat(mcBlanco));
+
+        return manaCost.toString();
+    }
+
+
+
+    public static String buildColorIdentity(boolean icAzul, boolean icRojo, boolean icVerde, boolean icNegro, boolean icBlanco) {
+        StringBuilder colorIdentity = new StringBuilder();
+
+        if (icAzul) colorIdentity.append("U");
+        if (icRojo) colorIdentity.append("R");
+        if (icVerde) colorIdentity.append("G");
+        if (icNegro) colorIdentity.append("B");
+        if (icBlanco) colorIdentity.append("W");
+
+        return colorIdentity.toString();
+    }
+
+    public static String buildColor(boolean icAzul, boolean icRojo, boolean icVerde, boolean icNegro, boolean icBlanco) {
+        StringBuilder color = new StringBuilder();
+
+        if (icAzul) color.append("Azul, ");
+        if (icRojo) color.append("Rojo, ");
+        if (icVerde) color.append("Verde, ");
+        if (icNegro) color.append("Negro, ");
+        if (icBlanco) color.append("Blanco, ");
+
+        // Eliminar la última coma y espacio, si existe
+        if (color.length() > 0) {
+            color.setLength(color.length() - 2);
+        }
+
+        return color.toString();
+    }
+
+
+
+
+    // Metodo para vaciar los campos del formulario
     private void clearFields() {
         Txt_Nombre.clear();
         Cmb_Set.setValue(null);
@@ -150,16 +189,15 @@ public class InsertWindow {
         Chk_IcBlanco.setSelected(false);
     }
 
-    // Método para inicializar la ventana (llenar ComboBoxes, etc.)
+    // Metodo para inicializar la ventana (llenar ComboBoxes, etc.)
     @FXML
     public void initialize() {
-        // Aquí se pueden inicializar valores predeterminados para ComboBoxes o cualquier otro control.
-        Cmb_Set.getItems().addAll("Set 1", "Set 2", "Set 3"); // Ejemplo
-        Cmb_Tipo.getItems().addAll("Tipo 1", "Tipo 2", "Tipo 3");
-        Cmb_Rareza.getItems().addAll("Común", "Rara", "Épica");
-        Cmb_McDoble.getItems().addAll("Doble 1", "Doble 2", "Doble 3");
+        // Cargar opciones desde la base de datos para cada ComboBox
+        Cmb_Set.getItems().addAll(Connect.getSets());
+        Cmb_Tipo.getItems().addAll(Connect.getTipos());
+        Cmb_Rareza.getItems().addAll(Connect.getRarezas());
 
-        // Agregar valores predeterminados a los spinners
+        // Configurar los valores predeterminados de los Spinners
         Sp_Poder.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         Sp_Resistencia.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         Sp_McAzul.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
@@ -169,6 +207,7 @@ public class InsertWindow {
         Sp_McBlanco.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
         Sp_McIncoloro.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
     }
+
 
     @FXML
     public void toMainWindow(ActionEvent event) throws IOException {

@@ -38,7 +38,7 @@
                   <TableColumn prefWidth="105.0" text="PRECIO" />
               </columns>
             </TableView>
-            <ComboBox fx:id="CmbFiltrarPor" layoutX="499.0" layoutY="123.0" prefWidth="150.0" promptText="Nombe" />
+            <ComboBox fx:id="CmbFiltrarPor" layoutX="499.0" layoutY="123.0" prefWidth="150.0" promptText="Precio Ascendete" />
             <Label layoutX="395.0" layoutY="122.0" text="Filtrar por:">
                <font>
                   <Font size="18.0" />
