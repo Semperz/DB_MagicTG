@@ -9,12 +9,12 @@ public class Card {
     private String color_identity;
     private int poder;
     private int resistencia;
-    private int tipo;
-    private int rareza;
-    private int card_set;
+    private Type tipo;
+    private Rarity rareza;
+    private Set card_set;
     private float precio;
 
-    public Card(int id_card, String nombre, String mana_cost, int cmc, String color, String color_identity, int poder, int resistencia, int tipo, int rareza, int card_set, float precio) {
+    public Card(int id_card, String nombre, String mana_cost, int cmc, String color, String color_identity, int poder, int resistencia, Type tipo, Rarity rareza, Set card_set, float precio) {
         this.id_card = id_card;
         this.nombre = nombre;
         this.mana_cost = mana_cost;
@@ -95,27 +95,27 @@ public class Card {
         this.resistencia = resistencia;
     }
 
-    public int getTipo() {
+    public Type getTipo() {
         return tipo;
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(Type tipo) {
         this.tipo = tipo;
     }
 
-    public int getRareza() {
+    public Rarity getRareza() {
         return rareza;
     }
 
-    public void setRareza(int rareza) {
+    public void setRareza(Rarity rareza) {
         this.rareza = rareza;
     }
 
-    public int getCard_set() {
+    public Set getCard_set() {
         return card_set;
     }
 
-    public void setCard_set(int card_set) {
+    public void setCard_set(Set card_set) {
         this.card_set = card_set;
     }
 

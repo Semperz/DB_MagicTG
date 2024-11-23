@@ -1,11 +1,14 @@
 package edu.badpals.db_magictg.controller;
 
+import edu.badpals.db_magictg.conexion.Connect;
+import edu.badpals.db_magictg.services.DataExporter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -21,7 +24,21 @@ public class ExportWindow {
     private Button BtnVolver;
 
     @FXML
-    private TextField TxtFileName;
+    private TextField TxtNombreArchivo;
+
+    @FXML
+    public void exportData(ActionEvent event) {
+        String fileName = TxtNombreArchivo.getText().trim();
+        if (fileName.isEmpty()) {
+            Alerts.newAlert(Alert.AlertType.ERROR, "Error", "Por favor ingrese un nombre de archivo.");
+            return;
+        }
+
+        Connect connection = new Connect();
+        String data = Connect.listarCartasExport(connection); // Obtener los datos para exportar
+        DataExporter.exportData(fileName, data); // Exportar los datos
+        Alerts.newAlert(Alert.AlertType.INFORMATION, "Exportación Completa", "Los datos han sido exportados correctamente.");
+    }
 
 
     @FXML

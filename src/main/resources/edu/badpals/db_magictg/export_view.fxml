@@ -11,14 +11,14 @@
     <children>
         <AnchorPane prefHeight="399.0" prefWidth="600.0">
             <children>
-                <Button layoutX="149.0" layoutY="164.0" mnemonicParsing="false" text="Exportar" />
+                <Button fx:id="BtnExportarJSON" layoutX="149.0" layoutY="164.0" mnemonicParsing="false" onAction="#exportData" text="Exportar" />
                 <Button fx:id="BtnVolverInicio" layoutX="282.0" layoutY="189.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
                 <Label layoutX="39.0" layoutY="31.0" text="Exportar a Json">
                     <font>
                         <Font size="45.0" />
                     </font>
                 </Label>
-                <TextField layoutX="47.0" layoutY="103.0" prefHeight="25.0" prefWidth="285.0" promptText="Nombre del archivo" />
+                <TextField fx:id="TxtNombreArchivo" layoutX="47.0" layoutY="103.0" prefHeight="25.0" prefWidth="285.0" promptText="Nombre del archivo" />
             </children>
         </AnchorPane>
     </children>

@@ -33,10 +33,10 @@ public class LogInWindow {
 
         // Validación de credenciales desde la base de datos
         if (validarCredenciales(user, password)) {
-            showAlert(Alert.AlertType.INFORMATION, "Login Exitoso", "Bienvenido, " + user + "!");
+            Alerts.newAlert(Alert.AlertType.INFORMATION, "Login Exitoso", "Bienvenido, " + user + "!");
             toMainWindow(event);
         } else {
-            showAlert(Alert.AlertType.ERROR, "Login Fallido", "Usuario o contraseña incorrectos.");
+            Alerts.newAlert(Alert.AlertType.ERROR, "Login Fallido", "Usuario o contraseña incorrectos.");
         }
     }
 
@@ -80,11 +80,5 @@ public class LogInWindow {
         currentStage.close();
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 }

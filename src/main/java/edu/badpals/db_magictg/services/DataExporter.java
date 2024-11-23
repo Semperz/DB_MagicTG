@@ -7,56 +7,92 @@ import java.io.IOException;
 import java.util.*;
 
 public class DataExporter {
+
     public static void exportData(String fileName, String data) {
         String exportDir = "exports";
         File dir = new File(exportDir);
         if (!dir.exists()) {
-            dir.mkdir();
+            dir.mkdir(); // Crear el directorio si no existe
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append(exportDir).append("/").append(fileName).append(".").append("json");
-        String filePath = sb.toString();
-        saveAsJson(filePath, data);
+
+        String filePath = exportDir + "/" + fileName + ".json"; // Ruta del archivo
+
+        // Verificamos si el archivo ya existe
+        File file = new File(filePath);
+        if (file.exists()) {
+            // Si el archivo ya existe, lo actualizamos
+            updateJson(filePath, data);
+        } else {
+            // Si no existe, lo creamos
+            saveAsJson(filePath, data);
+        }
     }
-
-
 
     private static void saveAsJson(String filePath, String data) {
         try {
             String[] rows = data.split("\n");
-            // creacion de la lista que formará el JSON
             List<Map<String, String>> cardList = new ArrayList<>();
 
-            // recorrer las filas y columnas de para crear un mapa de cada carta
             for (String row : rows) {
-                // Crear un mapa para una sola carta
                 Map<String, String> card = new LinkedHashMap<>();
-
-                // Dividir columnas correctamente por ", " sin perder datos
                 String[] columns = row.split(", (?=\\w+:)");
                 for (String column : columns) {
-                    String[] keyValue = column.split(":", 2); // Dividir clave y valor con ":" como separador
-                    card.put(keyValue[0].trim(), keyValue[1].trim()); // El trim() limpia espacios y devuelve el valor
+                    String[] keyValue = column.split(":", 2);
+                    card.put(keyValue[0].trim(), keyValue[1].trim());
                 }
                 if (!card.isEmpty()) {
                     cardList.add(card);
                 }
             }
 
-            // Crear el objeto padre "cards"
             Map<String, Object> resultJson = new HashMap<>();
             resultJson.put("cards", cardList);
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), resultJson);
-            System.out.println("Archivo JSON creado exitosamente: ");
+            System.out.println("Archivo JSON creado exitosamente: " + filePath);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private static void updateJson(String filePath, String data) {
+        try {
+            String[] rows = data.split("\n");
+            List<Map<String, String>> cardList = new ArrayList<>();
 
+            for (String row : rows) {
+                Map<String, String> card = new LinkedHashMap<>();
+                String[] columns = row.split(", (?=\\w+:)");
+                for (String column : columns) {
+                    String[] keyValue = column.split(":", 2);
+                    card.put(keyValue[0].trim(), keyValue[1].trim());
+                }
+                if (!card.isEmpty()) {
+                    cardList.add(card);
+                }
+            }
+
+            Map<String, Object> resultJson = new HashMap<>();
+            resultJson.put("cards", cardList);
+
+            ObjectMapper mapper = new ObjectMapper();
+            // Leemos el archivo existente y lo actualizamos
+            File file = new File(filePath);
+            Map<String, Object> existingData = mapper.readValue(file, Map.class);
+
+            // Suponiendo que queremos agregar más datos, unimos las listas existentes con las nuevas
+            List<Map<String, String>> existingCards = (List<Map<String, String>>) existingData.get("cards");
+            existingCards.addAll(cardList);
+            resultJson.put("cards", existingCards);
+
+            // Guardamos los datos actualizados en el mismo archivo
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, resultJson);
+            System.out.println("Archivo JSON actualizado exitosamente: " + filePath);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-

@@ -1,8 +1,10 @@
 package edu.badpals.db_magictg.controller;
 
+import edu.badpals.db_magictg.conexion.Connect;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
@@ -30,34 +32,38 @@ public class ModifyWindow {
         String nuevoPrecioStr = Txt_NuevoPrecio.getText();  // Obtener el nuevo precio
 
         try {
-            // Convertir el nuevo precio a un número decimal
-            double nuevoPrecio = Double.parseDouble(nuevoPrecioStr);
+            // Verificar que el nombre de la carta no esté vacío
+            if (nombreCarta == null || nombreCarta.trim().isEmpty()) {
+                Alerts.newAlert(Alert.AlertType.ERROR, "Nombre de Carta Vacío", "Por favor, ingresa el nombre de la carta.");
+                return;
+            }
 
-            // Aquí puedes agregar la lógica para modificar el precio de la carta en la base de datos o en la lista interna
-            // Por ejemplo:
-            if (modificarPrecioCarta(nombreCarta, nuevoPrecio)) {
+            // Convertir el nuevo precio a un número decimal
+            float nuevoPrecio = Float.parseFloat(nuevoPrecioStr);
+
+            // Llamamos a Connect para actualizar el precio de la carta en la base de datos
+            boolean exito = Connect.modificarPrecioPorNombre(nombreCarta, nuevoPrecio);
+
+            if (exito) {
+                // Éxito en la modificación del precio
                 System.out.println("Precio de la carta '" + nombreCarta + "' modificado a: " + nuevoPrecio);
+                Alerts.newAlert(Alert.AlertType.INFORMATION, "Modificación Exitosa", "El precio de la carta '" + nombreCarta + "' ha sido modificado a: " + nuevoPrecio);
             } else {
-                System.out.println("No se pudo modificar el precio de la carta '" + nombreCarta + "'.");
+                // No se pudo modificar el precio porque no se encontró la carta
+                System.out.println("No se pudo modificar el precio de la carta '" + nombreCarta + "' porque no se encontró.");
+                Alerts.newAlert(Alert.AlertType.ERROR, "Modificación Fallida", "No se encontró una carta con el nombre '" + nombreCarta + "'.");
             }
         } catch (NumberFormatException e) {
+            // Capturar el error si el nuevo precio no es un número válido
             System.out.println("El nuevo precio debe ser un número válido.");
+            Alerts.newAlert(Alert.AlertType.ERROR, "Precio Inválido", "Por favor, ingresa un precio válido (número decimal).");
+        } catch (Exception e) {
+            // Capturar cualquier otro error general
+            e.printStackTrace();
+            Alerts.newAlert(Alert.AlertType.ERROR, "Error de Modificación", "Ocurrió un error al modificar el precio de la carta. Detalles: " + e.getMessage());
         }
     }
 
-    // Metodo ficticio para modificar el precio de la carta en la base de datos o lista (simulado)
-    private boolean modificarPrecioCarta(String nombreCarta, double nuevoPrecio) {
-        // Aquí deberías implementar la lógica para buscar la carta y actualizar el precio en la base de datos o en una lista interna.
-        // Si la carta se encuentra y se actualiza el precio, retornar true. De lo contrario, retornar false.
-
-        // Ejemplo de validación simulada:
-        if (nombreCarta != null && !nombreCarta.isEmpty()) {
-            // Aquí iría la lógica para actualizar el precio de la carta en la base de datos
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     // Acción para volver a la ventana principal o la ventana de inicio
     @FXML
