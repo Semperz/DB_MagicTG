@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.InsertWindow">
     <children>
         <AnchorPane prefHeight="654.0" prefWidth="980.0">
             <children>
@@ -19,8 +19,8 @@
                         <Font size="39.0" />
                     </font>
                 </Label>
-                <Button fx:id="BtnVolver" layoutX="898.0" layoutY="567.0" mnemonicParsing="false" text="Volver" />
-                <Button fx:id="BtnAñadirCarta" layoutX="420.0" layoutY="536.0" mnemonicParsing="false" text="Añadir" />
+                <Button fx:id="BtnVolver" layoutX="898.0" layoutY="567.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
+                <Button fx:id="BtnAñadirCarta" layoutX="420.0" layoutY="536.0" mnemonicParsing="false" onAction="#addCard" text="Añadir" />
                 <Label layoutX="128.0" layoutY="121.0" text="Nombre:" />
                 <Label layoutX="152.0" layoutY="234.0" text="Set:" />
                 <Label layoutX="148.0" layoutY="270.0" text="Tipo:" />

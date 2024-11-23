@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="278.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="278.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.ModifyWindow">
     <children>
         <AnchorPane prefHeight="356.0" prefWidth="403.0">
             <children>
@@ -19,8 +18,8 @@
                 </Label>
                 <TextField fx:id="Txt_NombreCarta" layoutX="125.0" layoutY="117.0" promptText="Nombre de la Carta" />
                 <TextField fx:id="Txt_NuevoPrecio" layoutX="125.0" layoutY="164.0" promptText="Nuevo Precio" />
-                <Button fx:id="Btn_ModificarPrecio" layoutX="168.0" layoutY="216.0" mnemonicParsing="false" text="Modificar" />
-                <Button fx:id="Btn_VolverInicio" layoutX="325.0" layoutY="241.0" mnemonicParsing="false" text="Volver" />
+                <Button fx:id="Btn_ModificarPrecio" layoutX="168.0" layoutY="216.0" mnemonicParsing="false" onAction="#modificarPrecio" text="Modificar" />
+                <Button fx:id="Btn_VolverInicio" layoutX="325.0" layoutY="241.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
             </children>
         </AnchorPane>
     </children>

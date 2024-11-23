@@ -7,13 +7,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="361.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.ExportWindowController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="361.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.ExportWindow">
     <children>
         <AnchorPane prefHeight="399.0" prefWidth="600.0">
             <children>
                 <Button layoutX="149.0" layoutY="164.0" mnemonicParsing="false" text="Exportar" />
-                <Button layoutX="282.0" layoutY="189.0" mnemonicParsing="false" text="Volver" />
+                <Button fx:id="BtnVolverInicio" layoutX="282.0" layoutY="189.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
                 <Label layoutX="39.0" layoutY="31.0" text="Exportar a Json">
                     <font>
                         <Font size="45.0" />

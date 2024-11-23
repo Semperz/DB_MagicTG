@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="347.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="347.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.DeleteWindow">
     <children>
         <AnchorPane prefHeight="400.0" prefWidth="600.0">
             <children>
@@ -17,10 +16,10 @@
                         <Font size="45.0" />
                     </font>
                 </Label>
-                <TextField fx:id="Txt_EliminarNombre" layoutX="99.0" layoutY="108.0" promptText="Nombre de la carta" />
+                <TextField fx:id="Txt_EliminarID" layoutX="99.0" layoutY="108.0" promptText="ID de la carta" />
                 <TextField fx:id="Txt_EliminarConfirmarNombre" layoutX="99.0" layoutY="144.0" promptText="Confirma el Nombre" />
-                <Button fx:id="Btn_EliminarCarta" layoutX="149.0" layoutY="184.0" mnemonicParsing="false" text="Eliminar" />
-                <Button fx:id="Btn_VolverInicio" layoutX="274.0" layoutY="196.0" mnemonicParsing="false" text="Volver" />
+                <Button fx:id="Btn_EliminarCarta" layoutX="149.0" layoutY="184.0" mnemonicParsing="false" onAction="#eliminarCarta" text="Eliminar" />
+                <Button fx:id="Btn_VolverInicio" layoutX="274.0" layoutY="196.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
             </children>
         </AnchorPane>
     </children>
