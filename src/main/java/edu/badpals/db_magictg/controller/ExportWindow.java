@@ -34,7 +34,6 @@ public class ExportWindow {
             return;
         }
 
-        Connect connection = new Connect();
         String data = Connect.listarCartasExport(); // Obtener los datos para exportar
         DataExporter.exportData(fileName, data); // Exportar los datos
         Alerts.newAlert(Alert.AlertType.INFORMATION, "Exportación Completa", "Los datos han sido exportados correctamente.");

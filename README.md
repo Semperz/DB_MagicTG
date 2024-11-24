@@ -52,28 +52,39 @@ El proyecto sigue el patrón de arquitectura **MVC (Model-View-Controller)**.
 1. **`LogInWindow`**: Esta clase maneja la funcionalidad de inicio de sesión de los usuarios. Permite que los usuarios ingresen sus credenciales y autentifica su acceso.
 
     - Métodos importantes:
-        - **tryToLogIN()**: Autentifica al usuario y en caso de no existir en el JSON que guarda nuestros usuarios salta una ventana de error y no permite entrar.
+        - **iniciarSesion(ActionEvent event)**: Cambia a la pantalla pricipal si se validaron correctamente las credenciales.
+        - **validarCredenciales()**: método que valida si existe el usuario con la contraseña.
 
-        - **loadMainView()**: método que al pasar correctamente el anterior método mencionado te lleva a la pestaña principal
 
-
-2. **`MainWindowController`**: es la clase que maneja la pantalla principal, como se muestran las cartas y el botón para pasar a la ventana de exportación.
+2. **`MainWindow`**: es la clase que maneja la pantalla principal.
 
     - Métodos importantes:
-        - **SearchInformation(ActionEvent event)**: Es la función principal y la que después de hacer *click* en el botón de buscar, hace la petición a la API (o al caché) para luego mostrar los datos con el siguiente método.
-        - **mostrarDatos(Response response, String nameInput)**: Después de buscar en la API (o en el caché), muestra en la pantalla principal las características que nosotros decidimos mostrar de cada carta.
-        - **cargarUltimaBusqueda(String nombreUsuario)**: carga la última búsqueda del usuario en el que se hizo un *Log In* exitoso y se haya buscado una carta.
-        - **toExportView(ActionEvent event)**: cambia a la **ventana de exportación (secondWindowController).**
-        - **toLogin(ActionEvent event)**: vuelve al *Log In* para volver a entrar con un usuario diferente o con el mismo.
-        - **closeApp(ActionEvent actionEvent)**: cierra la aplicación despues de darle al botón correspondiente.
-        - **fetchApiData()**: guarda la consulta a la API para que se pueda exportar en la **ventana de exportación**.
+        - **establecerCarta()**: Es la función principal, se encarga de cargar las cartas o carta en la tabla.
+        - **obtenerCartasFiltradas(String nombreCarta, String tipoPrecio, String tipoSet)**: se encarga de filtrar las cartas que aparece en la tabla dependiendo del nombre de la carta, precio o set.
+        - **resetTable()**: devuelve la tabla a su estado principal, donde aparecen todas las cartas. 
+        - **toExportView(ActionEvent event)**: cambia a la ventana de exportación. 
+        - Los demás métodos, parecidos a este último, cambian a las distintas pantallas existentes.
 
 
-3. **`SecondWindowController`**: es la clase que maneja la ventana de exportación a los 4 tipos de archivo que se pidieron en la descripción del proyecto: JSON, BIN, TXT y XML. Además, el usuario le debe de poner nombre. Si no se seleccionó ninguna carta, no se puso nombre o dejaron el tipo de archivo sin escoger, saltará una ventana de que faltan campos por cubrir.
+4. **`ExportWindow`**: es la clase que maneja la ventana de exportación a JSON
     - Métodos importantes:
-        - **toCardSearch(ActionEvent event)**: Este método cambia la vista actual de la aplicación JavaFX a una nueva escena definida en el archivo **`mainView.fxml`**, actualizando la ventana (stage) y centrando la nueva escena en la pantalla.
-        - **handleSaveAction()**: Este método guarda los datos ingresados por el usuario en un archivo usando el formato seleccionado, verificando que los campos necesarios no estén vacíos. Si la exportación es exitosa, muestra una alerta de confirmación; de lo contrario, muestra una alerta de error indicando que faltan datos o no se seleccionó una carta
-        - **setApiData(String data)**: Este método estático establece el valor de la variable estática **`apiData`** con el valor proporcionado en el parámetro `data`. Es un setter que permite asignar datos a **`apiData`** desde otras partes del código.
+        - **exportData(ActionEvent event)**: Este método selecciona todas las cartas de la base de datos y las envía al transformador a JSON.
+
+
+5. **`InsertWindow`**: es la clase que maneja la inserción de nuevas cartas.
+    - Métodos importantes:
+        - **addCard(ActionEvent event)**: Este método añade nuevas cartas a la base de datos cubriendo los campos que se piden.
+
+
+6. **`DeleteWindow`**: es la clase que maneja la eliminación de cartas.
+    - Métodos importantes:
+        - **eliminarCarta(ActionEvent event)**: Este método elimina una carta segun su ID y nombre, para confirmarlo.
+
+
+7. **`ModifyWindow`**: es la clase que maneja la ventana de exportación a JSON
+    - Métodos importantes:
+        - **modificarPrecio(ActionEvent event)**: Este método permite modificar el precio de cualquier carta de la base de datos si le proporcionas su nombre y su ID.
+        
 
 ## 2.2 Descripción del paquete `services`
 
@@ -90,24 +101,28 @@ Guarda la clase Java "User" de la base de datos **DB_LOGIN.sql**.
 
 ## 2.5 Descripción del paquete `conexion`
 
-
-
+- Métodos importantes:
+  - **crearConexion()**: Crea la conexión a la base de datos.
+  - **listarCartasExport()**: Selecciona todas las cartas de la DB y lo formatea correctamente (parejas clave:valor) para que luego se exporte a un JSON bien formado
+  - **readAllCards()**: Y sus variantes, dependiendo del filtro, cargan las cartas en la tabla de la ventana principal.
+  
 ## 2.6 `src/main/resources` – Almacenamiento de FXML y Recursos
 
-La carpeta `src/main/edu/badpals/db_magictg/resources` contiene todos los archivos necesarios para la interfaz gráfica de usuario y otros recursos estáticos, como las bases de datos que usamos.
+La carpeta `edu/badpals/db_magictg/resources` contiene todos los archivos necesarios para la interfaz gráfica de usuario y otros recursos estáticos, como las bases de datos que usamos.
 
 ### Subcarpetas clave y archivos:
 
 **Archivos FXML principales**:
-- **`Add_Card_view.fxml.fxml`**: Define el diseño de la pantalla de crear una ca.
-- **`mainView.fxml`**: Define la estructura de la pantalla principal donde se visualiza la búsqueda y datos de las cartas.
-- **`exportView.fxml`**: Define la estructura de la pantalla que muestra el menú de exportación de la búsqueda.
-- **`exportView.fxml`**: Define la estructura de la pantalla que muestra el menú de exportación de la búsqueda.
-- **`exportView.fxml`**: Define la estructura de la pantalla que muestra el menú de exportación de la búsqueda.
+- **`Add_Card_view.fxml`**: Define el diseño de la pantalla de crear una carta nueva.
+- **`Delete_card_view.fxml`**:  Define la estructura de la pantalla que muestra el menú de eliminar una carta de la base de datos.
+- **`export_view.fxml`**: Define la estructura de la pantalla que muestra el menú de exportación de las cartas.
+- **`Log_in_view.fxml`**: Define la estructura de la pantalla que muestra el menú de inicio para acceder a la aplicación.
+- **`Main_view_MTG.fxml`**: Define la estructura de la pantalla principal donde se visualiza la lista de cartas con sus datos y los filtros.
+- **`Modify_Price_view.fxml`**: Define la estructura de la pantalla que muestra el menú de cambio de precio de una carta.
 
 ### Relación entre los controladores y los archivos FXML
 
-Cada archivo FXML tiene asociado un archivo Java en el paquete de **controller** con un nombre similar
+Cada archivo FXML tiene asociado un archivo Java en el paquete de **controller** con un nombre similar.
 
 
 # <u>Manual para Desarrolladores</u>
@@ -118,6 +133,7 @@ Cada archivo FXML tiene asociado un archivo Java en el paquete de **controller**
 2. JavaFX 17: Usado para la interfaz gráfica de usuario (GUI) en Java.
 3. Maven: Herramienta para la gestión de proyectos y dependencias en Java.
 4. Git: Sistema de control de versiones para gestionar el código fuente.
+5. MySQL o un SGBD compatible: Necesario para cargar las dos bases de datos en local.
 
 ## Instrucciones de Instalación
 
