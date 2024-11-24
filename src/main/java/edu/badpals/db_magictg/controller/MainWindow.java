@@ -8,22 +8,22 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainWindow  {
 
     @FXML
     private ComboBox<String> CmbSet;
+
+    @FXML
+    private ComboBox<String> CmbFiltrarPor;
 
     @FXML
     private TextField TxtCardName;
@@ -85,7 +85,6 @@ public class MainWindow  {
 
     @FXML
     public void initialize() {
-        // Configurar las columnas con los métodos getter correspondientes
         columnaID.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getId_card()))
         );
@@ -115,15 +114,21 @@ public class MainWindow  {
         columnaPrecio.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrecio())));
 
 
-        // Cargar los datos en la tabla
-        List<Card> cardList = Connect.readAllCards();
-        ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
-        tableViewCards.setItems(cards);
-
 
         //Cargar combobox sets
-        CmbSet.getItems().addAll(Connect.getSets());
+        List<String> list = Connect.getSets();
+        list.add(0, "Por defecto");
+        CmbSet.getItems().addAll(list);
+        CmbSet.valueProperty().addListener((observable, oldValue, newValue) -> {
+            actualizarTablaConFiltros();
+        });
+        CmbFiltrarPor.getItems().addAll("Por defecto", "Precio Ascendente", "Precio Descendente");
+        CmbFiltrarPor.valueProperty().addListener((observable, oldValue, newValue) -> {
+            actualizarTablaConFiltros();
+        });
 
+        //Inicializar tabla
+        establecerCarta();
     }
 
 
@@ -147,7 +152,7 @@ public class MainWindow  {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-        // Cerrar la ventana actual
+
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.close();
     }
@@ -159,7 +164,7 @@ public class MainWindow  {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-        // Cerrar la ventana actual
+
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.close();
     }
@@ -172,48 +177,114 @@ public class MainWindow  {
         stage.setScene(new Scene(root));
         stage.show();
 
-        // Cerrar la ventana actual
+
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.close();
     }
 
     @FXML
     public void toLogIn(ActionEvent event) throws IOException {
-        // Cargar la nueva ventana
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/badpals/db_magictg/Log_in_view.fxml"));
         Parent root = loader.load();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
 
-        // Cerrar la ventana actual
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.close();
     }
 
     @FXML
-    private void buscarCarta() {
+    private void establecerCarta() {
         String nombreCarta = TxtCardName.getText().trim();
-
+        String tipoPrecio = CmbFiltrarPor.getValue();
+        String tipoSet = CmbSet.getValue();
 
         List<String> nombresCartas = Connect.getNombreCartas();
 
-        // Verificar si el nombre existe en la lista
-        if (nombresCartas.contains(nombreCarta)) {
-            List<Card> cardList = Connect.searchCardByName(nombreCarta);
-            ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
-            tableViewCards.setItems(cards);
-        } else if  (nombreCarta.isEmpty()) {
-            List<Card> cardList = Connect.readAllCards();
-            ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
-            tableViewCards.setItems(cards);
-        } else {
-            Alerts.newAlert(Alert.AlertType.ERROR, "La carta no existe", "El nombre ingresado no coincide con ninguna carta.");
+        if (!nombreCarta.isEmpty() && !nombresCartas.contains(nombreCarta)) {
+            Alerts.newAlert(Alert.AlertType.ERROR, "Error de búsqueda", "La carta '" + nombreCarta + "' no existe en la base de datos.");
+            return;
         }
+
+        // cartas filtradas
+        ObservableList<Card> cards = obtenerCartasFiltradas(nombreCarta, tipoPrecio, tipoSet);
+
+        // No resultado a los filtros
+        if (cards.isEmpty() && !nombreCarta.isEmpty()) {
+            Alerts.newAlert(Alert.AlertType.ERROR, "Sin resultados", "No se encontraron cartas que coincidan con los filtros aplicados.");
+        }
+
+
+        tableViewCards.setItems(cards);
     }
 
 
+    private void actualizarTablaConFiltros() {
+        establecerCarta();
+    }
 
+    private ObservableList<Card> obtenerCartasFiltradas(String nombreCarta, String tipoPrecio, String tipoSet) {
+        List<Card> cardList;
 
+        // Manejar caso de "Por defecto"
+        boolean precioPorDefecto = tipoPrecio == null || "Por defecto".equals(tipoPrecio);
+        boolean setPorDefecto = tipoSet == null || "Por defecto".equals(tipoSet);
+
+        if (nombreCarta == null || nombreCarta.isEmpty()) {
+            // Sin nombre de carta
+            if (!precioPorDefecto && !setPorDefecto) {
+                // Filtrar por precio y set
+                cardList = "Precio Ascendente".equals(tipoPrecio)
+                        ? Connect.searchByPrizeAscAndSet(tipoSet)
+                        : Connect.searchByPrizeDescAndSet(tipoSet);
+            } else if (!precioPorDefecto) {
+                // Filtrar solo por precio
+                cardList = "Precio Ascendente".equals(tipoPrecio)
+                        ? Connect.searchByPrizeAsc()
+                        : Connect.searchByPrizeDesc();
+            } else if (!setPorDefecto) {
+                // Filtrar solo por set
+                cardList = Connect.searchCardsBySet(tipoSet);
+            } else {
+                // Sin filtros: mostrar todas las cartas
+                cardList = Connect.readAllCards();
+            }
+        } else {
+            // Con nombre de carta
+            if (!precioPorDefecto && !setPorDefecto) {
+                // Filtrar por nombre, precio y set
+                cardList = "Precio Ascendente".equals(tipoPrecio)
+                        ? Connect.searchCardByPrizeAscAndSet(tipoSet, nombreCarta)
+                        : Connect.searchCardByPrizeDescAndSet(tipoSet, nombreCarta);
+            } else if (!precioPorDefecto) {
+                // Filtrar por nombre y precio
+                cardList = "Precio Ascendente".equals(tipoPrecio)
+                        ? Connect.searchCardByPrizeAsc(nombreCarta)
+                        : Connect.searchCardByPrizeDesc(nombreCarta);
+            } else if (!setPorDefecto) {
+                // Filtrar por nombre y set
+                cardList = Connect.searchCardsBySetAndName(tipoSet, nombreCarta);
+            } else {
+                // Filtrar solo por nombre
+                cardList = Connect.searchCardByName(nombreCarta);
+            }
+        }
+
+        return FXCollections.observableArrayList(cardList);
+    }
+
+    @FXML
+    public void resetTable(){
+        List<Card> allCards = Connect.readAllCards();
+        ObservableList<Card> cards = FXCollections.observableArrayList(allCards);
+        TxtCardName.clear();
+        tableViewCards.setItems(cards);
+        List<String> list = Connect.getSets();
+        list.add(0, "Por defecto");
+        CmbSet.setValue(list.get(0));
+        CmbFiltrarPor.setValue("Por defecto");
+    }
 
 }

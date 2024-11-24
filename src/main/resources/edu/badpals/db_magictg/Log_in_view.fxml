@@ -8,18 +8,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.LogInWindow">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="289.0" prefWidth="334.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.LogInWindow">
    <children>
-      <AnchorPane prefHeight="437.0" prefWidth="600.0">
+      <AnchorPane prefHeight="271.0" prefWidth="324.0">
          <children>
-            <Label layoutX="158.0" layoutY="36.0" text="Log In">
+            <Label layoutX="95.0" layoutY="22.0" text="Log In">
                <font>
-                  <Font size="48.0" />
+                  <Font name="Comic Sans MS" size="48.0" />
                </font>
             </Label>
-            <TextField fx:id="Txt_User" layoutX="150.0" layoutY="159.0" promptText="Usuario" />
-            <Button fx:id="BtnLogIn" layoutX="199.0" layoutY="251.0" mnemonicParsing="false" onAction="#iniciarSesion" text="Log In" />
-            <PasswordField fx:id="Txt_Password" layoutX="150.0" layoutY="198.0" promptText="Contraseña" />
+            <TextField fx:id="Txt_User" layoutX="91.0" layoutY="117.0" promptText="Usuario" />
+            <Button fx:id="BtnLogIn" layoutX="134.0" layoutY="233.0" mnemonicParsing="false" onAction="#iniciarSesion" text="Log In" />
+            <PasswordField fx:id="Txt_Password" layoutX="91.0" layoutY="173.0" promptText="Contraseña" />
          </children>
       </AnchorPane>
    </children>

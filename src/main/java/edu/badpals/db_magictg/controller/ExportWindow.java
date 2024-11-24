@@ -48,6 +48,8 @@ public class ExportWindow {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-       ;
+        // Cerrar la ventana actual
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 }

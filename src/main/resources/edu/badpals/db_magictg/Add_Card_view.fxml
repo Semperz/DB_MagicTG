@@ -10,26 +10,29 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.InsertWindow">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="986.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.InsertWindow">
     <children>
-        <AnchorPane prefHeight="654.0" prefWidth="980.0">
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="641.0" prefWidth="986.0" VBox.vgrow="ALWAYS">
             <children>
-                <Label layoutX="165.0" layoutY="38.0" text="AÑADIR CARTA A LA BASE DE DATOS">
+                <Label layoutX="146.0" layoutY="36.0" text="AÑADIR CARTA A LA BASE DE DATOS">
                     <font>
-                        <Font size="39.0" />
+                        <Font name="Comic Sans MS Bold" size="39.0" />
                     </font>
                 </Label>
                 <Button fx:id="BtnVolver" layoutX="898.0" layoutY="567.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
                 <Button fx:id="BtnAñadirCarta" layoutX="420.0" layoutY="536.0" mnemonicParsing="false" onAction="#addCard" text="Añadir" />
-                <Label layoutX="128.0" layoutY="121.0" text="Nombre:" />
-                <Label layoutX="152.0" layoutY="234.0" text="Set:" />
-                <Label layoutX="148.0" layoutY="270.0" text="Tipo:" />
-                <Label layoutX="142.0" layoutY="305.0" text="Rareza:" />
-                <Label layoutX="134.0" layoutY="340.0" text="Precio:" />
-                <Label layoutX="144.0" layoutY="159.0" text="Poder:" />
+                <Label layoutX="125.0" layoutY="123.0" text="Nombre:">
+               <font>
+                  <Font name="Cambria" size="12.0" />
+               </font></Label>
+                <Label layoutX="138.0" layoutY="235.0" text="Set:" />
+                <Label layoutX="133.0" layoutY="271.0" text="Tipo:" />
+                <Label layoutX="126.0" layoutY="305.0" text="Rareza:" />
+                <Label layoutX="128.0" layoutY="341.0" text="Precio:" />
+                <Label layoutX="135.0" layoutY="160.0" text="Poder:" />
                 <Label layoutX="115.0" layoutY="203.0" text="Resistencia:" />
                 <Label layoutX="257.0" layoutY="406.0" text="Identidad de color:" />
-                <Label layoutX="534.0" layoutY="146.0" text="Mana Cost:" />
+                <Label layoutX="536.0" layoutY="122.0" text="Mana Cost:" />
                 <TextField fx:id="Txt_Nombre" layoutX="186.0" layoutY="117.0" prefHeight="25.0" prefWidth="271.0" />
                 <ComboBox fx:id="Cmb_Set" layoutX="185.0" layoutY="230.0" prefWidth="150.0" />
                 <ComboBox fx:id="Cmb_Tipo" layoutX="185.0" layoutY="266.0" prefWidth="150.0" />
@@ -53,7 +56,7 @@
                 <CheckBox fx:id="Chk_IcRojo" layoutX="340.0" layoutY="439.0" mnemonicParsing="false" text="Rojo" />
                 <CheckBox fx:id="Chk_IcVerde" layoutX="390.0" layoutY="439.0" mnemonicParsing="false" text="Verde" />
                 <CheckBox fx:id="Chk_IcNegro" layoutX="458.0" layoutY="439.0" mnemonicParsing="false" text="Negro" />
-                <CheckBox fx:id="Chk_IcBlanco" layoutX="523.0" layoutY="439.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="59.0" text="Blanco" />
+                <CheckBox fx:id="Chk_IcBlanco" layoutX="523.0" layoutY="439.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="86.0" text="Blanco" />
             </children>
         </AnchorPane>
     </children>

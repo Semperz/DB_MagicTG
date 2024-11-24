@@ -7,18 +7,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="361.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.ExportWindow">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="246.0" prefWidth="392.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.badpals.db_magictg.controller.ExportWindow">
     <children>
         <AnchorPane prefHeight="399.0" prefWidth="600.0">
             <children>
-                <Button fx:id="BtnExportarJSON" layoutX="149.0" layoutY="164.0" mnemonicParsing="false" onAction="#exportData" text="Exportar" />
-                <Button fx:id="BtnVolverInicio" layoutX="282.0" layoutY="189.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
-                <Label layoutX="39.0" layoutY="31.0" text="Exportar a Json">
+                <Button fx:id="BtnExportarJSON" layoutX="161.0" layoutY="147.0" mnemonicParsing="false" onAction="#exportData" text="Exportar" />
+                <Button fx:id="BtnVolverInicio" layoutX="312.0" layoutY="198.0" mnemonicParsing="false" onAction="#toMainWindow" text="Volver" />
+                <Label layoutX="20.0" layoutY="31.0" text="Exportar a Json">
                     <font>
-                        <Font size="45.0" />
+                        <Font name="Comic Sans MS" size="45.0" />
                     </font>
                 </Label>
-                <TextField fx:id="TxtNombreArchivo" layoutX="47.0" layoutY="103.0" prefHeight="25.0" prefWidth="285.0" promptText="Nombre del archivo" />
+                <TextField fx:id="TxtNombreArchivo" layoutX="57.0" layoutY="99.0" prefHeight="25.0" prefWidth="285.0" promptText="Nombre del archivo" />
             </children>
         </AnchorPane>
     </children>

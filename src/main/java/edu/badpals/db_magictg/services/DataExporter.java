@@ -12,15 +12,15 @@ public class DataExporter {
         String exportDir = "exports";
         File dir = new File(exportDir);
         if (!dir.exists()) {
-            dir.mkdir(); // Crear el directorio si no existe
+            dir.mkdir();
         }
 
-        String filePath = exportDir + "/" + fileName + ".json"; // Ruta del archivo
+        String filePath = exportDir + "/" + fileName + ".json";
 
-        // Verificamos si el archivo ya existe
+
         File file = new File(filePath);
         if (file.exists()) {
-            // Si el archivo ya existe, lo actualizamos
+
             updateJson(filePath, data);
         } else {
             // Si no existe, lo creamos

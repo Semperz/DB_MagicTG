@@ -30,6 +30,9 @@ public class Connect {
         return getConnection("jdbc:mysql://localhost:3306/db_login_magictg", propiedadesConexion);
     }
 
+
+
+
     public void cerrarConexion(Connection conexion) throws SQLException {
         conexion.close();
     }
@@ -56,7 +59,6 @@ public class Connect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(result);
         return result.toString();
 
     }
@@ -85,7 +87,7 @@ public class Connect {
                 "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
                 "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
                 "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
-                "\tORDER BY c.ID_CARD;";
+                "\tORDER BY c.ID_CARD ASC;";
         PreparedStatement ps;
         try {
             ps = crearConexion().prepareStatement(query);
@@ -123,7 +125,7 @@ public class Connect {
                 "INNER JOIN t_rareza as r ON c.RAREZA = r.ID_RAREZA " +
                 "INNER JOIN t_set as s ON c.CARD_SET = s.ID_SET " +
                 "WHERE c.NOMBRE = ?\n" +
-                "ORDER BY c.ID_CARD DESC;";
+                "ORDER BY c.ID_CARD ASC;";
         try (Connection conn = crearConexion();
              PreparedStatement ps = conn.prepareStatement(query)){
 
@@ -197,29 +199,40 @@ public class Connect {
     }
 
 
-    public static boolean modificarPrecioPorNombre(String nombreCarta, double nuevoPrecio) {
-        // Usamos LOWER() para hacer que la comparación sea insensible a mayúsculas/minúsculas
-        String query = "UPDATE t_cards SET PRECIO = ? WHERE LOWER(NOMBRE) = LOWER(?)";
+    public static boolean modificarPrecioPorIdYNombre(int idCarta, String nombreCarta, double nuevoPrecio) {
+        // Consulta SQL para actualizar el precio usando tanto el ID como el nombre de la carta
+        String query = "UPDATE t_cards SET PRECIO = ? WHERE ID = ? AND LOWER(NOMBRE) = LOWER(?)";
 
         try (Connection connection = crearConexion()) {
+            // Preparamos la consulta con los parámetros
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setDouble(1, nuevoPrecio);  // Establecer el nuevo precio
-            ps.setString(2, nombreCarta.toLowerCase());  // Convertir el nombre de la carta a minúsculas
+            ps.setInt(2, idCarta);  // Establecer el ID de la carta
+            ps.setString(3, nombreCarta.toLowerCase());  // Convertir el nombre de la carta a minúsculas para hacer la comparación insensible a mayúsculas/minúsculas
 
-            int filasAfectadas = ps.executeUpdate();  // Ejecutar la actualización
+            // Ejecutamos la actualización y verificamos cuántas filas fueron afectadas
+            int filasAfectadas = ps.executeUpdate();
 
+            // Si se afectaron filas, significa que la carta con el ID y nombre proporcionados se encontró y se actualizó
             if (filasAfectadas > 0) {
-                Alerts.newAlert(Alert.AlertType.INFORMATION, "Confirmación", "Precio de la carta '" + nombreCarta + "' modificado a: " + nuevoPrecio);
+                Alerts.newAlert(Alert.AlertType.INFORMATION, "Confirmación",
+                        "Precio de la carta con ID '" + idCarta + "' y nombre '" + nombreCarta + "' modificado a: " + nuevoPrecio);
                 return true;
             } else {
-                Alerts.newAlert(Alert.AlertType.ERROR, "Modificación Fallida", "Nombre o precio incorrecto.");
+                // Si no se encontró ninguna fila afectada, significa que no se encontró la carta con ese ID y nombre
+                Alerts.newAlert(Alert.AlertType.ERROR, "Modificación Fallida",
+                        "No se encontró una carta con el ID '" + idCarta + "' y nombre '" + nombreCarta + "'.");
                 return false;
             }
         } catch (SQLException e) {
+            // Si ocurre algún error en la consulta
             e.printStackTrace();
+            Alerts.newAlert(Alert.AlertType.ERROR, "Error en la Base de Datos",
+                    "Ocurrió un error al intentar modificar el precio de la carta. Detalles: " + e.getMessage());
             return false;
         }
     }
+
 
     public static void insertCard(String nombre, String manaCost, int cmc, String color, String colorIdentity,
                                   int poder, int resistencia, int tipo, int rareza, int cardSet, float precio) {
@@ -565,7 +578,7 @@ public class Connect {
         return selectedCard;
     }
 
-    public static List<Card> searchCardsBySet(int setID){
+    public static List<Card> searchByPrizeDescAndSet(String setName){
         List<Card> selectedCards = new ArrayList<>();
         String query = "SELECT \n" +
                 "\tc.ID_CARD,\n" +
@@ -589,12 +602,12 @@ public class Connect {
                 "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
                 "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
                 "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
-                "\tWHERE s.ID_SET = ?\n" +
+                "\tWHERE s.SET_NAME = ?\n" +
                 "\tORDER BY c.PRECIO DESC;";
         PreparedStatement ps;
         try {
             ps = crearConexion().prepareStatement(query);
-            ps.setInt(1, setID);
+            ps.setString(1, setName);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 int id = rs.getInt("ID_CARD");
@@ -619,7 +632,7 @@ public class Connect {
         return selectedCards;
     }
 
-    public static List<Card> searchCardsBySetAndName(int setID, String cardName){
+    public static List<Card> searchCardsBySetAndName(String setName, String cardName){
         List<Card> selectedCards = new ArrayList<>();
         String query = "SELECT \n" +
                 "\tc.ID_CARD,\n" +
@@ -643,12 +656,12 @@ public class Connect {
                 "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
                 "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
                 "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
-                "\tWHERE s.ID_SET = ? AND c.NOMBRE = ?\n" +
-                "\tORDER BY c.PRECIO DESC;";
+                "\tWHERE s.SET_NAME = ? AND c.NOMBRE = ?\n" +
+                "\tORDER BY c.ID_CARD ASC;";
         PreparedStatement ps;
         try {
             ps = crearConexion().prepareStatement(query);
-            ps.setInt(1, setID);
+            ps.setString(1, setName);
             ps.setString(2, cardName);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -688,4 +701,229 @@ public class Connect {
         }
         return cartas;
     }
+
+    public static List<Card> searchByPrizeAscAndSet(String setName) {
+        List<Card> selectedCards = new ArrayList<>();
+        String query = "SELECT \n" +
+                "\tc.ID_CARD,\n" +
+                "\tc.NOMBRE,\n" +
+                "    c.MANA_COST,\n" +
+                "    c.CMC,\n" +
+                "    c.COLOR,\n" +
+                "    c.COLOR_IDENTITY,\n" +
+                "    c.PODER,\n" +
+                "    c.RESISTENCIA,\n" +
+                "    t.ID_TYPE,\n" +
+                "    t.TYPE_NAME,\n" +
+                "    r.ID_RAREZA,\n" +
+                "    r.NOMBRE_RAREZA,\n" +
+                "    s.ID_SET,\n" +
+                "    s.SET_NAME,\n" +
+                "    c.PRECIO\n" +
+                "    FROM t_cards as c INNER JOIN t_type as t\n" +
+                "\t\t\t\t\tON c.TIPO=t.ID_TYPE\n" +
+                "                    INNER JOIN t_rareza as r\n" +
+                "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
+                "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
+                "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
+                "\tWHERE s.SET_NAME = ?\n" +
+                "\tORDER BY c.PRECIO ASC;";
+        PreparedStatement ps;
+        try {
+            ps = crearConexion().prepareStatement(query);
+            ps.setString(1, setName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("ID_CARD");
+                String nombre = rs.getString("NOMBRE");
+                String manaCost = rs.getString("MANA_COST");
+                int cmc = rs.getInt("CMC");
+                String color = rs.getString("COLOR");
+                String colorIdentity = rs.getString("COLOR_IDENTITY");
+                int poder = rs.getInt("PODER");
+                int resistencia = rs.getInt("RESISTENCIA");
+                Type tipo = new Type(rs.getInt("ID_TYPE"), rs.getString("TYPE_NAME"));
+                Rarity rareza = new Rarity(rs.getInt("ID_RAREZA"), rs.getString("NOMBRE_RAREZA"));
+                Set cardSet = new Set(rs.getInt("ID_SET"), rs.getString("SET_NAME"));
+                float precio = rs.getFloat("PRECIO");
+                Card card = new Card(id, nombre, manaCost, cmc, color, colorIdentity, poder, resistencia, tipo, rareza, cardSet, precio);
+                selectedCards.add(card);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return selectedCards;
+    }
+
+    public static List<Card> searchCardsBySet(String setName) {
+        List<Card> selectedCards = new ArrayList<>();
+        String query = "SELECT \n" +
+                "\tc.ID_CARD,\n" +
+                "\tc.NOMBRE,\n" +
+                "    c.MANA_COST,\n" +
+                "    c.CMC,\n" +
+                "    c.COLOR,\n" +
+                "    c.COLOR_IDENTITY,\n" +
+                "    c.PODER,\n" +
+                "    c.RESISTENCIA,\n" +
+                "    t.ID_TYPE,\n" +
+                "    t.TYPE_NAME,\n" +
+                "    r.ID_RAREZA,\n" +
+                "    r.NOMBRE_RAREZA,\n" +
+                "    s.ID_SET,\n" +
+                "    s.SET_NAME,\n" +
+                "    c.PRECIO\n" +
+                "    FROM t_cards as c INNER JOIN t_type as t\n" +
+                "\t\t\t\t\tON c.TIPO=t.ID_TYPE\n" +
+                "                    INNER JOIN t_rareza as r\n" +
+                "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
+                "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
+                "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
+                "\tWHERE s.SET_NAME = ?\n" +
+                "\tORDER BY c.ID_CARD ASC;";
+        PreparedStatement ps;
+        try {
+            ps = crearConexion().prepareStatement(query);
+            ps.setString(1, setName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("ID_CARD");
+                String nombre = rs.getString("NOMBRE");
+                String manaCost = rs.getString("MANA_COST");
+                int cmc = rs.getInt("CMC");
+                String color = rs.getString("COLOR");
+                String colorIdentity = rs.getString("COLOR_IDENTITY");
+                int poder = rs.getInt("PODER");
+                int resistencia = rs.getInt("RESISTENCIA");
+                Type tipo = new Type(rs.getInt("ID_TYPE"), rs.getString("TYPE_NAME"));
+                Rarity rareza = new Rarity(rs.getInt("ID_RAREZA"), rs.getString("NOMBRE_RAREZA"));
+                Set cardSet = new Set(rs.getInt("ID_SET"), rs.getString("SET_NAME"));
+                float precio = rs.getFloat("PRECIO");
+                Card card = new Card(id, nombre, manaCost, cmc, color, colorIdentity, poder, resistencia, tipo, rareza, cardSet, precio);
+                selectedCards.add(card);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return selectedCards;
+    }
+
+
+    public static List<Card> searchCardByPrizeAscAndSet(String tipoSet, String nombreCarta) {
+        List<Card> selectedCards = new ArrayList<>();
+        String query = "SELECT \n" +
+                "\tc.ID_CARD,\n" +
+                "\tc.NOMBRE,\n" +
+                "    c.MANA_COST,\n" +
+                "    c.CMC,\n" +
+                "    c.COLOR,\n" +
+                "    c.COLOR_IDENTITY,\n" +
+                "    c.PODER,\n" +
+                "    c.RESISTENCIA,\n" +
+                "    t.ID_TYPE,\n" +
+                "    t.TYPE_NAME,\n" +
+                "    r.ID_RAREZA,\n" +
+                "    r.NOMBRE_RAREZA,\n" +
+                "    s.ID_SET,\n" +
+                "    s.SET_NAME,\n" +
+                "    c.PRECIO\n" +
+                "    FROM t_cards as c INNER JOIN t_type as t\n" +
+                "\t\t\t\t\tON c.TIPO=t.ID_TYPE\n" +
+                "                    INNER JOIN t_rareza as r\n" +
+                "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
+                "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
+                "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
+                "\tWHERE s.SET_NAME = ? AND c.NOMBRE = ?\n" +
+                "\tORDER BY c.Precio ASC;";
+        PreparedStatement ps;
+        try {
+            ps = crearConexion().prepareStatement(query);
+            ps.setString(1, tipoSet);
+            ps.setString(2, nombreCarta);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("ID_CARD");
+                String nombre = rs.getString("NOMBRE");
+                String manaCost = rs.getString("MANA_COST");
+                int cmc = rs.getInt("CMC");
+                String color = rs.getString("COLOR");
+                String colorIdentity = rs.getString("COLOR_IDENTITY");
+                int poder = rs.getInt("PODER");
+                int resistencia = rs.getInt("RESISTENCIA");
+                Type tipo = new Type(rs.getInt("ID_TYPE"), rs.getString("TYPE_NAME"));
+                Rarity rareza = new Rarity(rs.getInt("ID_RAREZA"), rs.getString("NOMBRE_RAREZA"));
+                Set cardSet = new Set(rs.getInt("ID_SET"), rs.getString("SET_NAME"));
+                float precio = rs.getFloat("PRECIO");
+                Card card = new Card(id, nombre, manaCost, cmc, color, colorIdentity, poder, resistencia, tipo, rareza, cardSet, precio);
+                selectedCards.add(card);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return selectedCards;
+    }
+
+    public static List<Card> searchCardByPrizeDescAndSet(String tipoSet, String nombreCarta) {
+        List<Card> selectedCards = new ArrayList<>();
+        String query = "SELECT \n" +
+                "\tc.ID_CARD,\n" +
+                "\tc.NOMBRE,\n" +
+                "    c.MANA_COST,\n" +
+                "    c.CMC,\n" +
+                "    c.COLOR,\n" +
+                "    c.COLOR_IDENTITY,\n" +
+                "    c.PODER,\n" +
+                "    c.RESISTENCIA,\n" +
+                "    t.ID_TYPE,\n" +
+                "    t.TYPE_NAME,\n" +
+                "    r.ID_RAREZA,\n" +
+                "    r.NOMBRE_RAREZA,\n" +
+                "    s.ID_SET,\n" +
+                "    s.SET_NAME,\n" +
+                "    c.PRECIO\n" +
+                "    FROM t_cards as c INNER JOIN t_type as t\n" +
+                "\t\t\t\t\tON c.TIPO=t.ID_TYPE\n" +
+                "                    INNER JOIN t_rareza as r\n" +
+                "\t\t\t\t\t\tON c.RAREZA=r.ID_RAREZA\n" +
+                "\t\t\t\t\t\t\tINNER JOIN t_set as s\n" +
+                "\t\t\t\t\t\t\t\tON c.CARD_SET=s.ID_SET\n" +
+                "\tWHERE s.SET_NAME = ? AND c.NOMBRE = ?\n" +
+                "\tORDER BY c.PRECIO DESC;";
+        PreparedStatement ps;
+        try {
+            ps = crearConexion().prepareStatement(query);
+            ps.setString(1, tipoSet);
+            ps.setString(2, nombreCarta);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("ID_CARD");
+                String nombre = rs.getString("NOMBRE");
+                String manaCost = rs.getString("MANA_COST");
+                int cmc = rs.getInt("CMC");
+                String color = rs.getString("COLOR");
+                String colorIdentity = rs.getString("COLOR_IDENTITY");
+                int poder = rs.getInt("PODER");
+                int resistencia = rs.getInt("RESISTENCIA");
+                Type tipo = new Type(rs.getInt("ID_TYPE"), rs.getString("TYPE_NAME"));
+                Rarity rareza = new Rarity(rs.getInt("ID_RAREZA"), rs.getString("NOMBRE_RAREZA"));
+                Set cardSet = new Set(rs.getInt("ID_SET"), rs.getString("SET_NAME"));
+                float precio = rs.getFloat("PRECIO");
+                Card card = new Card(id, nombre, manaCost, cmc, color, colorIdentity, poder, resistencia, tipo, rareza, cardSet, precio);
+                selectedCards.add(card);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return selectedCards;
+    }
+
+
+
+
+
+
 }

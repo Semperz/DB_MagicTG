@@ -17,6 +17,8 @@ import java.io.IOException;
 public class ModifyWindow {
 
     @FXML
+    private TextField Txt_IdCarta;  // Campo para ingresar el ID de la carta
+    @FXML
     private TextField Txt_NombreCarta;  // Campo para ingresar el nombre de la carta
     @FXML
     private TextField Txt_NuevoPrecio;  // Campo para ingresar el nuevo precio
@@ -28,11 +30,17 @@ public class ModifyWindow {
     // Acción para modificar el precio de la carta
     @FXML
     public void modificarPrecio(ActionEvent event) {
+        String idCartaStr = Txt_IdCarta.getText();  // Obtener el ID de la carta
         String nombreCarta = Txt_NombreCarta.getText();  // Obtener el nombre de la carta
         String nuevoPrecioStr = Txt_NuevoPrecio.getText();  // Obtener el nuevo precio
 
         try {
-            // Verificar que el nombre de la carta no esté vacío
+            // Verificar que el ID de la carta y el nombre no estén vacíos
+            if (idCartaStr == null || idCartaStr.trim().isEmpty()) {
+                Alerts.newAlert(Alert.AlertType.ERROR, "ID de Carta Vacío", "Por favor, ingresa el ID de la carta.");
+                return;
+            }
+
             if (nombreCarta == null || nombreCarta.trim().isEmpty()) {
                 Alerts.newAlert(Alert.AlertType.ERROR, "Nombre de Carta Vacío", "Por favor, ingresa el nombre de la carta.");
                 return;
@@ -40,30 +48,30 @@ public class ModifyWindow {
 
             // Convertir el nuevo precio a un número decimal
             float nuevoPrecio = Float.parseFloat(nuevoPrecioStr);
+            int idCarta = Integer.parseInt(idCartaStr);  // Convertir el ID a entero
 
             // Llamamos a Connect para actualizar el precio de la carta en la base de datos
-            boolean exito = Connect.modificarPrecioPorNombre(nombreCarta, nuevoPrecio);
+            boolean exito = Connect.modificarPrecioPorIdYNombre(idCarta, nombreCarta, nuevoPrecio);
 
             if (exito) {
                 // Éxito en la modificación del precio
-                System.out.println("Precio de la carta '" + nombreCarta + "' modificado a: " + nuevoPrecio);
-                Alerts.newAlert(Alert.AlertType.INFORMATION, "Modificación Exitosa", "El precio de la carta '" + nombreCarta + "' ha sido modificado a: " + nuevoPrecio);
+                System.out.println("Precio de la carta con ID '" + idCarta + "' y nombre '" + nombreCarta + "' modificado a: " + nuevoPrecio);
+                Alerts.newAlert(Alert.AlertType.INFORMATION, "Modificación Exitosa", "El precio de la carta con ID '" + idCarta + "' y nombre '" + nombreCarta + "' ha sido modificado a: " + nuevoPrecio);
             } else {
                 // No se pudo modificar el precio porque no se encontró la carta
-                System.out.println("No se pudo modificar el precio de la carta '" + nombreCarta + "' porque no se encontró.");
-                Alerts.newAlert(Alert.AlertType.ERROR, "Modificación Fallida", "No se encontró una carta con el nombre '" + nombreCarta + "'.");
+                System.out.println("No se pudo modificar el precio de la carta con ID '" + idCarta + "' y nombre '" + nombreCarta + "' porque no se encontró.");
+                Alerts.newAlert(Alert.AlertType.ERROR, "Modificación Fallida", "No se encontró una carta con el ID '" + idCarta + "' y nombre '" + nombreCarta + "'.");
             }
         } catch (NumberFormatException e) {
-            // Capturar el error si el nuevo precio no es un número válido
-            System.out.println("El nuevo precio debe ser un número válido.");
-            Alerts.newAlert(Alert.AlertType.ERROR, "Precio Inválido", "Por favor, ingresa un precio válido (número decimal).");
+            // Capturar el error si el ID o el nuevo precio no son números válidos
+            System.out.println("El ID y el precio deben ser números válidos.");
+            Alerts.newAlert(Alert.AlertType.ERROR, "Datos Inválidos", "Por favor, ingresa un ID válido (número entero) y un precio válido (número decimal).");
         } catch (Exception e) {
             // Capturar cualquier otro error general
             e.printStackTrace();
             Alerts.newAlert(Alert.AlertType.ERROR, "Error de Modificación", "Ocurrió un error al modificar el precio de la carta. Detalles: " + e.getMessage());
         }
     }
-
 
     // Acción para volver a la ventana principal o la ventana de inicio
     @FXML
