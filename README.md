@@ -94,7 +94,7 @@ Guarda la clase Java "User" de la base de datos **DB_LOGIN.sql**.
 
 ## 2.6 `src/main/resources` – Almacenamiento de FXML y Recursos
 
-La carpeta `src/main/resources` contiene todos los archivos necesarios para la interfaz gráfica de usuario y otros recursos estáticos, como las bases de datos que usamos.
+La carpeta `src/main/edu/badpals/db_magictg/resources` contiene todos los archivos necesarios para la interfaz gráfica de usuario y otros recursos estáticos, como las bases de datos que usamos.
 
 ### Subcarpetas clave y archivos:
 
