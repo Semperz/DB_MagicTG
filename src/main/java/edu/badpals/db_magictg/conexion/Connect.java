@@ -201,7 +201,7 @@ public class Connect {
 
     public static boolean modificarPrecioPorIdYNombre(int idCarta, String nombreCarta, double nuevoPrecio) {
         // Consulta SQL para actualizar el precio usando tanto el ID como el nombre de la carta
-        String query = "UPDATE t_cards SET PRECIO = ? WHERE ID = ? AND LOWER(NOMBRE) = LOWER(?)";
+        String query = "UPDATE t_cards SET PRECIO = ? WHERE ID_CARD = ? AND LOWER(NOMBRE) = LOWER(?)";
 
         try (Connection connection = crearConexion()) {
             // Preparamos la consulta con los parámetros
@@ -215,13 +215,8 @@ public class Connect {
 
             // Si se afectaron filas, significa que la carta con el ID y nombre proporcionados se encontró y se actualizó
             if (filasAfectadas > 0) {
-                Alerts.newAlert(Alert.AlertType.INFORMATION, "Confirmación",
-                        "Precio de la carta con ID '" + idCarta + "' y nombre '" + nombreCarta + "' modificado a: " + nuevoPrecio);
                 return true;
             } else {
-                // Si no se encontró ninguna fila afectada, significa que no se encontró la carta con ese ID y nombre
-                Alerts.newAlert(Alert.AlertType.ERROR, "Modificación Fallida",
-                        "No se encontró una carta con el ID '" + idCarta + "' y nombre '" + nombreCarta + "'.");
                 return false;
             }
         } catch (SQLException e) {

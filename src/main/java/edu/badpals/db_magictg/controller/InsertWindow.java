@@ -135,6 +135,10 @@ public class InsertWindow {
         if (mcNegro > 0) manaCost.append("{B}".repeat(mcNegro));
         if (mcBlanco > 0) manaCost.append("{W}".repeat(mcBlanco));
 
+        if (manaCost.isEmpty()) {
+            manaCost.append("{0}");
+        }
+
         return manaCost.toString();
     }
 
@@ -150,7 +154,7 @@ public class InsertWindow {
         if (mcBlanco > 0) color.append("Blanco, ");
 
         // Eliminar la última coma y espacio, si existe
-        if (color.length() > 0) {
+        if (!color.isEmpty()) {
             color.setLength(color.length() - 2);
         }
 

@@ -49,7 +49,7 @@ El proyecto sigue el patrón de arquitectura **MVC (Model-View-Controller)**.
 
 ## 2.1 Descripción de las clases en el paquete `controller`
 
-1. **`LoginController`**: Esta clase maneja la funcionalidad de inicio de sesión de los usuarios. Permite que los usuarios ingresen sus credenciales y autentifica su acceso.
+1. **`LogInWindow`**: Esta clase maneja la funcionalidad de inicio de sesión de los usuarios. Permite que los usuarios ingresen sus credenciales y autentifica su acceso.
 
     - Métodos importantes:
         - **tryToLogIN()**: Autentifica al usuario y en caso de no existir en el JSON que guarda nuestros usuarios salta una ventana de error y no permite entrar.
@@ -77,26 +77,37 @@ El proyecto sigue el patrón de arquitectura **MVC (Model-View-Controller)**.
 
 ## 2.2 Descripción del paquete `services`
 
-Este paquete contiene la lógica para exportar la búsqueda con la clase **`DataExporter`**.Además tiene el **`CacheManager`** que genera un JSON que contiene la búsqueda y lo guarda en caché. La última clase **`saveLastSearch`** permite que dependiendo del usuario con el que hayas accedido, puedas decidir si te carga la última búsqueda que este hizo.
+Este paquete contiene la lógica para exportar toda la base de datos a JSON. Su método más importante es  **saveAsJSON()** que procesa el String que guarda la base de datos 
+y **updateJSON()**, que en caso de haber un archivo con un nombre ya existente lo actualiza con posibles cambios que se le hayan hecho a la base de datos.
 
-## 2.3 `src/main/resources` – Almacenamiento de FXML y Recursos
+## 2.3 Descripción del paquete `model`
 
-La carpeta `src/main/resources` contiene todos los archivos necesarios para la interfaz gráfica de usuario y otros recursos estáticos.
+Guarda las clases Java de todas las tablas de la base de datos **DB_MAGICTG.sql**.
+
+## 2.4 Descripción del paquete `user`
+
+Guarda la clase Java "User" de la base de datos **DB_LOGIN.sql**.
+
+## 2.5 Descripción del paquete `conexion`
+
+
+
+## 2.6 `src/main/resources` – Almacenamiento de FXML y Recursos
+
+La carpeta `src/main/resources` contiene todos los archivos necesarios para la interfaz gráfica de usuario y otros recursos estáticos, como las bases de datos que usamos.
 
 ### Subcarpetas clave y archivos:
 
 **Archivos FXML principales**:
-- **`logIn.fxml`**: Define el diseño de la pantalla de inicio de sesión.
+- **`Add_Card_view.fxml.fxml`**: Define el diseño de la pantalla de crear una ca.
 - **`mainView.fxml`**: Define la estructura de la pantalla principal donde se visualiza la búsqueda y datos de las cartas.
+- **`exportView.fxml`**: Define la estructura de la pantalla que muestra el menú de exportación de la búsqueda.
+- **`exportView.fxml`**: Define la estructura de la pantalla que muestra el menú de exportación de la búsqueda.
 - **`exportView.fxml`**: Define la estructura de la pantalla que muestra el menú de exportación de la búsqueda.
 
 ### Relación entre los controladores y los archivos FXML
 
-- **`MainWindowController`** se asocia con **`mainView.fxml`**
-
-- **`SecondWindowController`** se asocia con **`exportView.fxml`**
-
-- **`LoginController`** se asocia con **`logIn.fxml`**
+Cada archivo FXML tiene asociado un archivo Java en el paquete de **controller** con un nombre similar
 
 
 # <u>Manual para Desarrolladores</u>
@@ -197,57 +208,98 @@ git --version
 
 ## Inicio de Sesión
 
-Al abrir la aplicación, te llevará a la pantalla de LogIn:
-
-![Inicio sesion app](img/PantallaLogIn.png)
-
+Al abrir la aplicación, te llevará a la pantalla de LogIn.
 En ella deberás introducir tu nombre de usuario y contraseña:
 
-![Introducir_credenciales](img/IntroducirCredenciales.png)
+![Vista del LogIn](Img/LogInView.png)
 
 Si introduces un usuario que no existe, te saltará un mensaje de error:
 
-![Error_usuario](img/UsuarioIncorrecto.png)
+![LogIn fallido](Img/LogInFallido.png)
 
 Si introduces un usuario que sí existe, te saldrá una notificación de que has iniciado sesión correctamente:
 
-![Pantalla_principal](img/LogInExitoso.png)
-
+![LogIn exitoso](Img/LogInExitoso.png)
 
 Una vez has introducido las credenciales correctamente te llevará a la pantalla principal:
 
+![Vista de la pantalla Principal](Img/MainView.png)
 
-Si decides ir a la pantalla de exportación de datos, esta sera tu vista:
+Puedes filtrar por nombre:
 
-![Pantalla_exportData](img/ExportData.png)
+![Vista de la pantalla Principal con filtro de nombre](Img/MainViewNombre.png)
 
-En ella puedes elegir el nombre del archivo Json.
+Por Precio:
 
-![Pantalla_exportData](img/SelectFormat.png)
+![Vista de la pantalla Principal con filtro de precio](Img/MainViewPrecio.png)
+
+Por Set:
+
+![Vista de la pantalla Principal con filtro de set](Img/MainViewSet.png)
+
+O por cualquier combinación de los tres: 
+
+![Vista de la pantalla Principal con filtro de nombre, precio y set](Img/MainViewAllThree.png)
+
+Si decides ir a la pantalla de exportación de datos.
+En ella puedes elegir el nombre del archivo Json, esta será tu vista:
+
+![Vista de la pantalla de Exportación de datos](Img/ExportView.png)
 
 Una vez introducido el nombre el archivo se te guardará en la carpeta exports:
 
-![Pantalla_exportData](img/ExportCorrectly.png)
+![Vista de la carpeta exports](Img/Exports.png)
 
-Puedes volver siempre a la pantalla principal:
+Si no introduces un nombre te lanzará un mensaje de error:
 
-![Directory_Exports](img/exportsDirectory.png)
+![Export Incorrecto](Img/ExportFallido.png)
+
+En caso de que introduzcas algún nombre te avisará de que la exportación se ha realizado correctamente:
+
+![Export Exitoso](Img/ExportCorrecto.png)
 
 Si seleccionas la opción de introducir una carta, esta será la vista:
 
+![Vista de añadir carta](Img/AddCardView.png)
 
 Debes introducir todos los datos o te saldrá un mensaje de error:
 
+![Añadir carta fallido](Img/AddCardFallido.png)
 
 Una vez introducidos los datos correctamente, te saldrá un mensaje de confirmación:
 
-Si decides ir a la pantalla de eliminación de datos, esta será tu vista:
+![Add Card Correcto](Img/AddCardCorrecto.png)
 
-Debes proporcionas el nombre y el ID de la carta que deseas eliminar:
+Si decides ir a la pantalla de eliminación de datos.
+Debes proporcionas el nombre y el ID de la carta que deseas eliminar, esta será tu vista:
+
+![Vista de eliminar carta](Img/DeleteView.png)
 
 Una vez introducidos los datos correctamente, te saldrá un mensaje de confirmación:
+
+![Delete Card Correcto](Img/DeleteExitoso.png)
 
 Si introduces una combinación de datos que no existe, te saldrá un mensaje de error:
+
+![Delete Card Fallido](Img/DeleteFallido.png)
+
+Si decides ir a la pantalla de modificación de datos.
+Debes introducir el ID y el nombre de la carta que deseas modificar, además del nuevo precio de la carta, esta será tu vista:
+
+![Vista de modificar carta](Img/ModifyView.png)
+
+Una vez introducidos los datos correctamente, te saldrá un mensaje de confirmación:
+
+![Modify Card Correcto](Img/ModifyExitoso.png)
+
+Si introduces una combinación de datos que no existe, te saldrá un mensaje de error:
+
+![Modify Card Fallido](Img/ModifyFallido.png)
+
+Los botones volver siempre vuelven a la pestaña posterior, es decir las acciones siempre te devuelven a la pestaña principal.
+
+Y la pestaña principal siempre te devuelve al log in.
+
 
 
 
