@@ -194,16 +194,17 @@ public class MainWindow  {
     @FXML
     private void buscarCarta() {
         String nombreCarta = TxtCardName.getText().trim();
-        if (nombreCarta.isEmpty()) {
-            Alerts.newAlert(Alert.AlertType.ERROR, "El campo está vacío", "Por favor, introduce un nombre de carta.");
-            return;
-        }
+
 
         List<String> nombresCartas = Connect.getNombreCartas();
 
         // Verificar si el nombre existe en la lista
         if (nombresCartas.contains(nombreCarta)) {
             List<Card> cardList = Connect.searchCardByName(nombreCarta);
+            ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
+            tableViewCards.setItems(cards);
+        } else if  (nombreCarta.isEmpty()) {
+            List<Card> cardList = Connect.readAllCards();
             ObservableList<Card> cards = FXCollections.observableArrayList(cardList);
             tableViewCards.setItems(cards);
         } else {
